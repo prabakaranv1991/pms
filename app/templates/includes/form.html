@@ -1,0 +1,56 @@
+{% load widget_tweaks %}
+{% load util %}
+
+{% for hidden_field in form.hidden_fields %}
+  {{ hidden_field }}
+{% endfor %}
+
+{% if form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in form.non_field_errors %}
+      {{ error }}
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% for field in form.visible_fields %}
+<div class="form-group row">
+    <label class="col-md-3 col-form-label" for="text-input">{{ field.label_tag }}</label>
+    <div class="col-md-4">
+        {%with class="" %}
+        {%if field|field_type != 'booleanfield' %}
+            {%append class "form-control" as class%}
+        {%endif%}
+        {% if form.is_bound %}
+          {% if field.errors %}
+            {% append class " is-invalid" as class %}
+          {% else %}
+            {% append class " valid" as class %}
+          {% endif %}
+        {% endif %}
+        {% if field|field_type == 'modelchoicefield' %}
+            {% render_field field class=class id=field.name placeholder=field.label %}
+        {% elif field|field_type == 'datefield' %}
+            {% render_field field type='date' class=class id=field.name placeholder=field.label %}
+        {% elif field|field_type == 'datetimefield' %}
+            {% render_field field type='datetime-local' class=class id=field.name placeholder=field.label %}
+        {% elif field.name == 'last_week_returns' or field.name == 'last_month_returns'  or field.name == 'last_quater_returns' or field.name == 'last_year_returns'%}
+            <div class="input-group">
+                {% render_field field class=class id=field.name placeholder=field.label %}
+                <div class="input-group-append"><span class="input-group-text">%</span></div>
+            </div>
+        {% else %}
+            {% render_field field class=class id=field.name placeholder=field.label %}
+        {% endif %}
+        {% for error in field.errors %}
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
+        {% endfor %}
+        {% if field.help_text %}
+            <span class="help-block">{{ field.help_text }}</span>
+        {% endif %}
+        {%endwith%}
+    </div>
+</div>
+{% endfor %}

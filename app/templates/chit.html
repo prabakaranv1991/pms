@@ -1,0 +1,158 @@
+{% extends "layouts/base.html" %}
+{% load util %}
+{% load humanize %}
+{% load mathfilters %}
+{% block title %} Chit Details {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link href='/static/fullcalender/main.css' rel='stylesheet'/>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<main class="c-main">
+    <div class="container-fluid">
+        <div class="fade-in">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="h6">Chit Details</span>
+                            <div class="card-header-actions">
+                                <a href="/chit/customer" class="card-header-action" title="Customers"><b>{{ 'people'|icon|safe }}</b></a>
+                                <a href="/chit/create" class="card-header-action">{{ 'plus'|icon|safe }}</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                <thead class="text-center">
+                                <th>Chit</th>
+                                <th>Duration</th>
+                                <th>Value</th>
+                                <th>Months</th>
+                                <th>ROI</th>
+                                <th>Commission</th>
+                                <th>Current Chit</th>
+                                <th>Current Outstanding</th>
+                                <th>Total Outstanding</th>
+                                <th></th>
+                                </thead>
+                                <tbody>
+                                {%for id,data in chit.items %}
+                                {%with chit_detail=chit_details|get_item:data.id current_total=0 total=0 %}
+                                <tr class="text-center">
+                                    <td><a href="/chit/{{ data.id }}">{{ data.name }}</a></td>
+                                    <td>{{ data.start_date|date:"M' y" }} - {{ data.end_date|date:"M' y" }}</td>
+                                    <td>{{ data.total_value|number_value }}</td>
+                                    <td>{{ data.total_months }}</td>
+                                    <td>{{ data.interest_percentage }}%</td>
+                                    <td>{{ data.commission_amount|number_value }}</td>
+                                    <td>
+                                        {%if data.current_month > 0 %}
+                                            <span class="badge badge-warning" style="min-width:50px">{{ data.current_month }}</span>
+                                        {%endif%}
+                                    </td>
+                                    <td class="text-right" width="15%">
+                                        {%for month,data_tmp in chit_detail.items %}
+                                            {%if data_tmp.current_month %}{{ data_tmp.outstanding_amount|number_value }}{%endif%}
+                                        {%endfor%}
+                                    </td>
+                                    <td class="text-right" width="15%">
+                                        {% get_total_pending_amount chit_detail as total_pending %}{{ total_pending|number_value }}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'chit_update' pk=id %}">
+                                            <svg class="c-icon">
+                                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {%endwith%}
+                                {%endfor%}
+                                </tbody>
+                                <tfoot>
+                                    <th class="text-right" colspan="7">Total</th>
+                                    <th class="text-right">{{ summary.total_current_month|number_value }}</th>
+                                    <th class="text-right">{{ summary.total|number_value }}</th>
+                                    <th></th>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {%if chit_id != None %}
+                {%with chit_detail=chit_details|get_item:chit_id chit_info=chit|get_item:chit_id%}
+                <div class="col-md-12">
+                    <div class="card">
+                            <div class="card-header">
+                                <span class="h6">{{chit_info.name}} - Chit Detail</span>
+                            </div>
+                            <div class="card-body">
+                                {%if chit_info.is_started == False %}
+                                    {%include 'new_customers_form.html' with customers=customers customer_list=customer_list chit_detail=chit_detail %}
+                                {%else%}
+                                    {%include 'chit_payment.html' with customers=customers chit_detail=chit_detail %}
+                                {%endif%}
+                            </div>
+                    </div>
+                </div>
+                {%endwith%}
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- Plugins and scripts required by this view-->
+<script src="/static/assets/vendors/@coreui/utils/js/coreui-utils.js"></script>
+<script src='/static/fullcalender/main.js'></script>
+<script type="text/javascript">
+    function add_customer(){
+        if($("[name=customer]").val() != ""){
+            $("#new_customer_form").submit()
+        }
+    }
+    $(document).ready(function(){
+        $(".payment").on("change", function(){
+            $.ajax({
+                type: 'POST',
+                url: '/chit/payment/update',
+                headers: { "X-CSRFToken": '{{ csrf_token }}' },
+                data: {
+                    chit: {{ chit_id }},
+                    month: $(this).data("month"),
+                    customer: $(this).data("customer")
+                },
+                success: function(data) {
+                }
+            })
+        })
+        $(".paid_status, .paid_to").on("change", function(){
+            if($(".paid_to[data-month="+$(this).data("month")+"]").val() == 0){
+                return False
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/chit/settlement/update',
+                headers: { "X-CSRFToken": '{{ csrf_token }}' },
+                data: {
+                    chit: {{ chit_id }},
+                    month: $(this).data("month"),
+                    paid: $(".paid_status[data-month="+$(this).data("month")+"]").prop("checked") ? 1 : 0,
+                    amount: $(".paid_value[data-month="+$(this).data("month")+"]").val(),
+                    customer: $(".paid_to[data-month="+$(this).data("month")+"]").val(),
+                },
+                success: function(data) {
+                }
+            })
+        })
+    })
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,98 @@
+{% extends "layouts/base.html" %}
+{% load util %}
+{% load humanize %}
+{% load mathfilters %}
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link href='/static/fullcalender/main.css' rel='stylesheet'/>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<main class="c-main">
+    <div class="container-fluid">
+        <div class="fade-in">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="expense" style="height:270px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="car_history" style="height:270px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    {%for label, data in summary_data.items%}
+                    <div class="card">
+                        <div class="card-body p-0 d-flex align-items-center">
+                            <div class="bg-gradient-{{ data.3 }} p-3 mfe-3">
+                                {{ data.2|icon|safe }}
+                            </div>
+                        <div>
+                            <div class="text-value text-{{ data.3 }}">{{ data.0|number_value }}</div>
+                            <div class="text-muted text-uppercase font-weight-bold small">{{ label }}</div>
+                        </div>
+                    </div>
+                        <div class="card-footer px-3 py-2">
+                            <a class="btn-block text-muted d-flex justify-content-between align-items-center" href="{{ data.1 }}">
+                                <span class="small font-weight-bold">View More</span>
+                                {{ 'chevron-right'|icon|safe }}
+                            </a>
+                        </div>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- Plugins and scripts required by this view-->
+<script src="/static/assets/vendors/@coreui/utils/js/coreui-utils.js"></script>
+<script src='/static/fullcalender/main.js'></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Highcharts.chart('expense', {
+            chart: { type: 'column' },
+            credits: { enabled: false },
+            title: { text: 'Expenses' },
+            xAxis: { categories: [{%for header in expense_graph_data.header%}'{{ header }}',{%endfor%}] },
+            yAxis: { title: { text: '' } },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table style="font-size:10px">',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:,.0f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: { column: { stacking: 'normal' } },
+            series: [
+            {%for header, values in expense_graph_data.values.items %}
+                {
+                    showInLegend: false,
+                    name: '{{ header }}',
+                    data: [{%for value in values.1%}{{value}},{%endfor%}],
+                    stack: '{{ values.0 }}'
+                },
+                {%endfor%}
+            ]
+        });
+    });
+</script>
+{%include 'car_status_graph.html' with graph_data=car_status.graph_data dashboard=car_status.dashboard duration=car_status.duration%}
+{% endblock javascripts %}

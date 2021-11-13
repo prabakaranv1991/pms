@@ -1,0 +1,48 @@
+{% load util %}
+{% load humanize %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+        {% for field, label in fields.items %}
+        <th>{{ label }}</th>
+        {% endfor %}
+        {%if download != True %}
+        <th>
+            <svg class="c-icon">
+                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+            </svg>
+        </th>
+        {%endif%}
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+    <tr>
+        {% for field, label in fields.items %}
+        <td class="{%if field_type|get_item:field == 'IntegerField' or field_type|get_item:field == 'DecimalField' %}numeric_value{%endif%}" >
+            {%if object|get_item:field %}
+                {%if field == 'activation_link' %}
+                    <span class="copy-btn" data-clipboard-text="{{ object|get_item:field }}"><a href="#">Copy Link</a></span>
+                {%elif field_type|get_item:field == 'IntegerField' %}
+                    {{ object|get_item:field|number_value }}
+                {%elif field_type|get_item:field == 'DecimalField' %}
+                    {{ object|get_item:field|number_value:1 }}
+                {%else%}
+                    {{ object|get_item:field }}
+                {%endif%}
+            {%endif%}
+        </td>
+        {% endfor %}
+        {%if download != True %}
+        <td>
+            <a href="{{request.path}}{{ object.id }}/update">
+                <svg class="c-icon">
+                    <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+                </svg>
+            </a>
+        </td>
+        {%endif%}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

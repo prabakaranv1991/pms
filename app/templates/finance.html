@@ -1,0 +1,83 @@
+{% extends "layouts/base.html" %}
+{% load util %}
+{% load humanize %}
+{% load mathfilters %}
+{% block title %} Finance {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link href='/static/fullcalender/main.css' rel='stylesheet'/>
+{% endblock stylesheets %}
+
+{% block content %}
+<form action="{{ request.get_full_path }}" method="POST" id="finance">
+{% csrf_token %}
+<main class="c-main">
+    <div class="container-fluid">
+        <div class="fade-in">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <b>Finance</b>
+                            <div class="card-header-actions">
+                                <a href="/finance/loan/" target="_blank" class="card-header-action"><b>Finance</b></a> |
+                                <a href="/finance/credit/" target="_blank" class="card-header-action"><b>Credit</b></a> |
+                                <a href="/finance/income/" target="_blank" class="card-header-action"><b>Income</b></a> |
+                                <a href="/finance/expense/" target="_blank" class="card-header-action"><b>Expense</b></a> |
+                                <a class="card-header-action">
+                                    <select name="month">
+                                        {%for month_name in month_list %}
+                                            <option {%if month_name|date:"Y-m-d" == month%}selected{%endif%} value="{{ month_name|date:"Y-m-d" }}">{{ month_name|date:"M' y" }}</option>
+                                        {%endfor%}
+                                    </select>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {%include 'finance_income.html' with monthly_payment_data=monthly_payment_data %}
+                                </div>
+                                <div class="col-md-6">
+                                    {%include 'finance_expense.html' with monthly_payment_data=monthly_payment_data %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <center><input type="submit" name="save" class="btn btn-primary" value="Save" /></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</form>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- Plugins and scripts required by this view-->
+<script src="/static/assets/vendors/@coreui/utils/js/coreui-utils.js"></script>
+<script src='/static/fullcalender/main.js'></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("[name=month]").on("change", function(){
+            window.location = '{% url 'chit' %}?month='+ $(this).val()
+        })
+        $("[name=new_income],[name=new_expense]").on("change", function(){
+            $("#finance").submit()
+        })
+        $(".paid").on("click", function(){
+            $(this).closest("tr").find(".paid_amount").val($(this).data("amount"))
+            $(this).closest("tr").find(".paid_amount").css("display", "");
+        })
+        $(".amount_text").on("click", function(){
+            $(this).closest("tr").find(".amount_edit").css("display", "");
+            $(this).remove()
+        });
+    })
+</script>
+{% endblock javascripts %}

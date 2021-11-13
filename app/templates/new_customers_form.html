@@ -1,0 +1,45 @@
+{% load util %}
+{% load humanize %}
+{% load mathfilters %}
+<form method="POST" id="new_customer_form">
+    {% csrf_token %}
+    <input type="hidden" name="chit" value="{{ chit_detail.id }}"/>
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+        <thead>
+        <th class="text-center">Sno</th>
+        <th class="text-center">Name</th>
+        <th class="text-center">Prefered Month</th>
+        </thead>
+        <tbody>
+        {%for id,data in customers.items %}
+        <tr>
+            <td class="text-center">{{ forloop.counter }}</td>
+            <td>{{ data.customer.name }}</td>
+            <td>
+                <select name="prefered_month[{{ data.id }}]"
+                        onchange="$('#new_customer_form').submit()"
+                        class="form-control col-md-8">
+                    <option value="0">No Preference</option>
+                    {%for month, chit_data in chit_detail.items %}
+                    <option {%if data.prefered_month == forloop.counter %}selected{%endif%} value="{{forloop.counter}}">{{ month|date:"M' Y" }}
+                        ({{ forloop.counter }})
+                    </option>
+                    {%endfor%}
+                </select>
+            </td>
+        </tr>
+        {%endfor%}
+        <tr>
+            <td colspan="3" align="right">
+                <select name="customer" class="form-control col-md-4"
+                        onchange="add_customer()">
+                    <option value="">Add Member</option>
+                    {%for id, data in customer_list.items%}
+                    <option value="{{ id }}">{{ data.name }}</option>
+                    {%endfor%}
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>

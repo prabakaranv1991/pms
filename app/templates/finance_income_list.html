@@ -1,0 +1,40 @@
+{% load util %}
+{% load humanize %}
+{% load mathfilters %}
+{%for data in data_list%}
+<tr>
+    <td class="text-center">{{ forloop.counter|add:sno_start }}</td>
+    <td>
+        {%if data.paid_amount == data.amount %}<del>{%endif%}
+        {{ data.name }}
+        {%if data.paid_amount == data.amount %}</del>{%endif%}
+    </td>
+    <td>{%if type == 'credit' %}Credit{%else%}{{ data.type }}{%endif%}</td>
+    <td>{{ data.source }}</td>
+    <td class="text-right">
+        {%if data.pay_type == 'Changeable' %}
+            <input type="text" name="{{ type }}[{{ data.id }}]" value="{{ data.amount }}" class="form-control text-right amount_edit" style="padding-right: 0px; padding-top:0px; display:none">
+        {%else%}
+            <input type="hidden" name="{{ type }}[{{ data.id }}]" value="{{ data.amount }}">
+        {%endif%}
+        <span class="{%if data.pay_type == 'Changeable' %}amount_text{%endif%}">{{ data.amount|number_value }}</span>
+    </td>
+    {%if 'paid_amount' in data %}
+    <td class="text-center text-right paid" data-amount="{{ data.amount }}" style="cursor:pointer">
+        {%if data.paid_amount == data.amount %}
+            {{ data.paid_amount|number_value }}
+            <input type="hidden" name="{{ type }}_paid[{{ data.id }}]" value="{{ data.paid_amount }}" />
+        {%else%}
+            {%if data.paid_amount %} {{ data.paid_amount|number_value }} {%endif%}
+            <input type="text" name="{{ type }}_paid[{{ data.id }}]" value="{{ data.paid_amount }}" class="paid_amount form-control text-right" style="padding-right: 0px; padding-top:0px; display:none; width:90px">
+        {%endif%}
+    </td>
+    <td class="text-center">
+        {{ data.paid_date|date:"d' M" }}
+        <input type="hidden" name="{{ type }}_paid_date[{{ data.id }}]" value="{%if data.paid_date%}{{ data.paid_date|date:"Y-m-d" }}{%else%}{% now "Y-m-d" %}{%endif%}">
+    </td>
+    {%else%}
+    <td colspan="2"></td>
+    {%endif%}
+</tr>
+{%endfor%}

@@ -1,0 +1,5 @@
+waitress
+django-mathfilters
+requests
+django-braces
+django-widget-tweaks

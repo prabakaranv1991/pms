@@ -1,0 +1,96 @@
+<script>
+    $(document).ready(function(){
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        chart = Highcharts.chart('car_history', {
+            chart: {
+                type: 'column',
+                events: {
+                    render: function() {
+                      let series = this.series
+                      let sum = 0
+                      for(let i = 0; i < series.length; i++) {
+                        if(series[i].visible){
+                          for(let j = 0; j < series[i].data.length; j++) {
+                            sum += series[i].data[j].y
+                          }
+                        }
+                      }
+                    this.setTitle(null, {text: "Total Kms: " + sum}, false)
+                    }
+                 }
+            },
+            title: {
+                text: '{{ chart_title }}'
+            },
+            xAxis: {
+                categories: {{ graph_data.header|safe }},
+                crosshair: true,
+                visible : false,
+                labels: {
+                    formatter: function() {
+                        var date = new Date(this.value.toString())
+                        return date.getDate()+"'"+ months[date.getMonth()]+" "+date.getFullYear().toString().slice(-2)
+                    },
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Kms'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} Kms</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0,
+                    borderRadius: 2,
+                    dataLabels: {
+                        enabled: true
+                    },
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            series: [
+                {%for name, data in graph_data.values.items%}
+                {
+                    showInLegend: false,
+                    name: '{{ name|safe }}',
+                    data: {{ data|safe }}
+                }
+                {%endfor%}
+            ]
+        })
+
+        const select = Highcharts.createElement(
+          'select', {
+            onchange: function(e) {
+              window.location = '{%if dashboard %}{% url 'dashboard' %}{%else%}{% url 'car_status' %}{%endif%}?duration='+ e.target.value
+            }
+          }, {
+            position: 'absolute',
+            top: chart.plotTop + 'px',
+            right: chart.plotLeft-50 + 'px'
+          }, document.getElementById('car_history'));
+        option_data = {0: 'This Month', '-1': 'Last Month',
+                        10: 'Last 10 Days', 30: 'Last 30 Days',
+                        60: 'Last 60 Days', 90: 'Last 90 Days'}
+        $.each(option_data, function(key, elem) {
+          Highcharts.createElement(
+            'option', {
+              value: key,
+              innerHTML: elem
+            }, {}, select);
+        });
+        $("#car_history > select").val({{ duration }})
+    })
+</script>

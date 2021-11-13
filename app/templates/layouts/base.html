@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v3.2.0
+* @link https://coreui.io
+* Copyright (c) 2020 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
+<html lang="en">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>
+      {% block title %}{% endblock %}
+    </title>
+    <link href="/static/site/assets/img/ai-trader-icon.png" rel="icon">
+    <link href="/static/site/assets/img/ai-trader-icon.png" rel="apple-touch-icon">
+
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/static/assets/img/primark_logo.png">
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Main styles for this application-->
+    <link href="/static/assets/css/style.css" rel="stylesheet">
+    <link href="/static/assets/vendors/toastr/toastr.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+        .numeric_value{
+            font-family: 'Montserrat', sans-serif;
+            text-align:right
+        }
+        .toast {
+          opacity: 1 !important;
+        }
+        #toast-container > div {
+          opacity: 1 !important;
+        }
+    </style>
+    <!-- Specific Page CSS goes HERE  -->
+    {% block stylesheets %}{% endblock stylesheets %}
+
+  </head>
+  <body class="c-app c-legacy-theme">
+
+    {% include 'includes/sidebar.html' %}
+
+    <div class="c-wrapper c-fixed-components">
+
+      {% include 'includes/navigation.html' %}
+
+      <div class="c-body">
+
+        {% block content %}{% endblock content %}
+
+
+    
+      </div>
+    
+    </div>
+
+    {% include 'includes/scripts.html' %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}{% endblock javascripts %}
+
+  </body>
+</html>

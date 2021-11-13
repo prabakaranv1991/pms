@@ -1,0 +1,107 @@
+{% extends "layouts/base.html" %}
+{% load util %}
+{% load humanize %}
+{% block title %} Car Status {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link href='/static/fullcalender/main.css' rel='stylesheet'/>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<main class="c-main">
+    <div class="container-fluid">
+        <div class="fade-in">
+            <div class="row">
+                {%for car in cars %}
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <b>
+                                {{ car.name }}
+                            </b>
+                            <div class="card-header-actions">
+                                <div class="card-header-action">
+                                    {% if car.ignition_status %}
+                                        <span class="text-success">
+                                    {%else%}
+                                        <span class="text-danger">
+                                    {%endif%}
+                                            {{ 'car-alt'|icon|safe }}
+                                        </span> |
+                                    <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="{{ car.address }}" data-original-title="Current Location">
+                                        {{ 'location-pin'|icon|safe }}
+                                    </a>|
+                                    <span class="badge badge-info">Mileage: <b>{{ car.total_kms|floatformat|intcomma }}</b> Kms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div id="car_history" style="height:300px"></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <table class="table table-bordered table-striped table-sm">
+                                            <thead><th colspan="2" style="text-align:center">Summary</th></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Current Month</td>
+                                                    <td align="center"><span class="badge badge-pill badge-danger">
+                                                        {{ summary.month.kms|get_item:car.name|floatformat|intcomma }} Kms
+                                                    </span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Today</td>
+                                                    <td align="center">
+                                                        <span class="badge badge-pill badge-warning">
+                                                        {%if car.name not in summary.today.kms%}
+                                                        0
+                                                        {%else%}
+                                                            {{ summary.today.kms|get_item:car.name|floatformat|intcomma }}
+                                                        {%endif%}
+                                                        Kms
+                                                    </span></td>
+                                                </tr>
+                                            </tbody>
+                                    </table>
+                                    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                        <thead><th colspan="4" style="text-align:center">History</th></thead>
+                                        <thead><th>Month</th><th>Used Days</th><th>Total Kms</th><th>Average Kms</th></thead>
+                                        <tbody>
+                                            {%for data in summary.month_summary|get_item:car.name %}
+                                            <tr>
+                                                <td align="center" style="white-space:nowrap">{{ data.1 }}</td>
+                                                <td align="center">{{ data.2 }}</td>
+                                                <td align="right">{{ data.3|floatformat|intcomma }}</td>
+                                                <td align="right">{{ data.4|floatformat|intcomma }}</td>
+                                            </tr>
+                                            {%endfor%}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div style="float:right; color: #969fac">
+                                As on: {{ car.gps_last_updated }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- Plugins and scripts required by this view-->
+<script src="/static/assets/vendors/@coreui/utils/js/coreui-utils.js"></script>
+<script src='/static/fullcalender/main.js'></script>
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+{%include 'car_status_graph.html' with graph_data=graph_data duration=duration %}
+{% endblock javascripts %}
