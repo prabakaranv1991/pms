@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'app.car',
     'app.chit',
-    'app.finance'
+    'app.finance',
+    'app.other'
 ]
 
 MIDDLEWARE = [
@@ -136,6 +137,9 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
 
-GPS_API = 'https://intouch.mapmyindia.com/apis/'
+
 
 PAGINATION_BY = 25
+
+GPS_API = 'https://intouch.mapmyindia.com/apis/'
+GPS_CREDENTIALS = {'username': '9944193082', 'password': '275b37fcf68e182c155f22ded6b5a987'}

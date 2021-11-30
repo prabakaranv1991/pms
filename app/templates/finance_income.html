@@ -50,3 +50,13 @@
         </tr>
     </tfoot>
 </table>
+<table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
+    <tbody><tr>
+        {%for header, value in monthly_payment_data.income_group.items %}
+            <th>{{header}}</th>
+            <td class="text-right">{{value|number_value}}</td>
+            {%if forloop.counter|divisibleby:2 and forloop.counter != monthly_payment_data.income_group.items|length %}</tr><tr>{%endif%}
+        {%endfor%}
+    </tbody>
+
+</table>

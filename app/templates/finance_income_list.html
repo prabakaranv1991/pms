@@ -9,8 +9,16 @@
         {{ data.name }}
         {%if data.paid_amount == data.amount %}</del>{%endif%}
     </td>
-    <td>{%if type == 'credit' %}Credit{%else%}{{ data.type }}{%endif%}</td>
-    <td>{{ data.source }}</td>
+    <td>
+
+        {%if type == 'credit' %}Credit{%else%}{{ data.type }}{%endif%}
+    </td>
+    {% ifchanged data.source %}
+    <td valign="center" rowspan="{{ monthly_payment_data.row_span.income|get_item:data.source  }} ">
+        {{ data.source }}
+    </td>
+    {%endifchanged%}
+
     <td class="text-right">
         {%if data.pay_type == 'Changeable' %}
             <input type="text" name="{{ type }}[{{ data.id }}]" value="{{ data.amount }}" class="form-control text-right amount_edit" style="padding-right: 0px; padding-top:0px; display:none">

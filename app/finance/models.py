@@ -148,7 +148,8 @@ class Credit(TimeStampedModel):
 
     @staticmethod
     def outstanding():
-        return Credit.active.aggregate(total_amount = Sum('amount'))['total_amount']
+        credit = Credit.active.aggregate(total_amount = Sum('amount'))
+        return 0 if credit['total_amount'] is None else credit['total_amount']
 
 class FinanceLoan(TimeStampedModel):
     name = models.CharField(max_length = 50)

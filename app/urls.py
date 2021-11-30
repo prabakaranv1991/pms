@@ -7,6 +7,7 @@ from app.dashboard import dashboard
 from app.car.views import *
 from app.chit.views import *
 from app.finance.views import *
+from app.other.views import *
 
 def handler404(request, *args, **argv):
     return HttpResponseRedirect('/home')
@@ -40,11 +41,19 @@ finance = [
     path('credit/<str:pk>/update/', login_required(CreditUpdate.as_view()), name='credit_update'),
     path('loan/', finance_loan, name='finance_loan'),
 ]
+
+other = [
+    path('password/', login_required(PasswordList.as_view()), name='password'),
+    path('password/create/', login_required(PasswordCreate.as_view()), name='password_create'),
+    path('password/<str:pk>/update/', login_required(PasswordUpdate.as_view()), name='password_update'),
+]
+
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     url('home/', dashboard, name='dashboard'),
     url('car/status/$', car_status, name="car_status"),
     path('chit/', include(chit)),
     path('finance/', include(finance)),
+    path('other/', include(other)),
     path('admin/', admin.site.urls),
 ]

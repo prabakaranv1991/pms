@@ -1,8 +1,8 @@
-from datetime import date, datetime
+from datetime import date
 from django.db import models
 import pandas as pd
 from app.abstract_models import TimeStampedModel
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 
 class Chit(TimeStampedModel):
 

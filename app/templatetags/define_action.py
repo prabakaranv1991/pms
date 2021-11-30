@@ -38,7 +38,7 @@ def get_item(dictionary, key):
         return getattr(dictionary, key)
     except Exception as e:
         try:
-             return dictionary[key]
+            return dictionary[key]
         except Exception as e:
             return None
     return None

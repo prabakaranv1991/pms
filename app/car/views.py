@@ -7,6 +7,7 @@ from django.db import connection
 
 @login_required
 def car_status(request, dashboard=False):
+    CarOdometer.collect_status()
     duration = int(request.GET.get('duration', 0))
     cursor = connection.cursor()
     query = """SELECT 
