@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from app.car.models import CarOdometer
+from car.models import CarOdometer
 from datetime import date
 from dateutil.relativedelta import relativedelta
 

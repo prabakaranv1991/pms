@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import login_required
 import json
-from app.crud import *
+from crud import *
 from django.shortcuts import render
 from django.http import HttpResponse
-from app.chit.models import Chit, Customers, ChitCustomers, ChitPayment, ChitSettlement
+from chit.models import Chit, Customers, ChitCustomers, ChitPayment, ChitSettlement
 from django.db.models import F
 import pandas as pd
 from datetime import date
-from app.chit.forms import *
+from chit.forms import *
 
 @login_required
 def chit(request, chit_id=None):

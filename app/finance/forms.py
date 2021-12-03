@@ -1,5 +1,5 @@
 from django import forms
-from app.finance.models import Income, FinanceSource, Expenses, Credit
+from finance.models import Income, FinanceSource, Expenses, Credit
 
 class FinanceSourceForm(forms.ModelForm):
     required_css_class = 'required'

@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import F, Q, Sum
 from django.utils import timezone
-from app.abstract_models import TimeStampedModel
+from abstract_models import TimeStampedModel
 from datetime import date
 
 class FinanceSource(TimeStampedModel):

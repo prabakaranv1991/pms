@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from app.car.models import Car, CarOdometer
+from car.models import Car, CarOdometer
 from datetime import date, datetime, timedelta
 import pandas as pd
 from django.db import connection

@@ -1,5 +1,5 @@
 from django.db import models
-from app.abstract_models import TimeStampedModel
+from abstract_models import TimeStampedModel
 
 class Password(TimeStampedModel):
     name = models.CharField(max_length=250)

@@ -1,5 +1,5 @@
 from django.db import models
-from app.abstract_models import TimeStampedModel
+from abstract_models import TimeStampedModel
 from django.conf import settings
 import requests, json
 from datetime import datetime, date

@@ -1,8 +1,0 @@
-psycopg2
-pandas
-waitress
-django-mathfilters
-requests
-django-braces
-django-widget-tweaks
-whitenoise

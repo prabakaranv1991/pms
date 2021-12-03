@@ -1,12 +1,12 @@
-from app.crud import *
+from crud import *
 from django.db.models import Q
-from app.finance.forms import IncomeForm, FinanceSourceForm, ExpenseForm, CreditForm
-from app.finance.models import Income, FinanceSource, Expenses, MonthlyPayment, Credit, FinanceLoan, FinanceUtilized
+from finance.forms import IncomeForm, FinanceSourceForm, ExpenseForm, CreditForm
+from finance.models import Income, FinanceSource, Expenses, MonthlyPayment, Credit, FinanceLoan, FinanceUtilized
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from datetime import date
 from dateutil.relativedelta import relativedelta
-from app.utils import *
+from utils import *
 import pandas as pd
 
 

@@ -1,5 +1,5 @@
-from app.chit.forms import *
-from app.viewsets.create import CreateViewCustom
+from chit.forms import *
+from viewsets.create import CreateViewCustom
 
 class ChitCreateView(CreateViewCustom):
     form_class = ChitForm

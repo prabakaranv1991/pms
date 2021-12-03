@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class ChitConfig(AppConfig):
-    name = 'app.chit'
+    name = 'chit'

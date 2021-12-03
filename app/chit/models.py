@@ -1,7 +1,7 @@
 from datetime import date
 from django.db import models
 import pandas as pd
-from app.abstract_models import TimeStampedModel
+from abstract_models import TimeStampedModel
 from django.db.models import JSONField
 
 class Chit(TimeStampedModel):

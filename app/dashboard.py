@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db.models import Sum
-from app.finance.models import MonthlyPayment, Credit
-from app.car.views import car_status
+from finance.models import MonthlyPayment, Credit
+from car.views import car_status
 from datetime import date
 
 @login_required

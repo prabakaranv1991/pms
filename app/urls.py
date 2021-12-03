@@ -3,11 +3,12 @@ from django.urls import path
 from django.conf.urls import include, url
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from app.dashboard import dashboard
-from app.car.views import *
-from app.chit.views import *
-from app.finance.views import *
-from app.other.views import *
+from django.conf.urls.static import static
+from dashboard import dashboard
+from car.views import *
+from chit.views import *
+from finance.views import *
+from other.views import *
 
 def handler404(request, *args, **argv):
     return HttpResponseRedirect('/home')
@@ -56,4 +57,4 @@ urlpatterns = [
     path('finance/', include(finance)),
     path('other/', include(other)),
     path('admin/', admin.site.urls),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

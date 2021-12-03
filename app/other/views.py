@@ -1,6 +1,6 @@
-from app.crud import *
-from app.other.models import Password
-from app.other.forms import PasswordForm
+from crud import *
+from other.models import Password
+from other.forms import PasswordForm
 
 class PasswordList(ListView):
     model = Password

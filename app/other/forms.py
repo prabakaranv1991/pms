@@ -1,5 +1,5 @@
 from django import forms
-from app.other.models import Password
+from other.models import Password
 
 class PasswordForm(forms.ModelForm):
     required_css_class = 'required'
