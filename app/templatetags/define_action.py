@@ -1,18 +1,14 @@
 from math import ceil
 from django import template
 from django.urls import resolve
-import locale
-locale.setlocale(locale.LC_ALL, 'en_IN.utf8')
+from babel.numbers import format_currency
 
 register = template.Library()
 
 @register.filter
 def number_value(val, decimal_places=0):
     try:
-        if decimal_places == 0:
-            return locale.format("%d", int(val), grouping = True)
-        else:
-            return locale.format_string('%.2f', val, grouping = True)
+        return format_currency(int(val), 'INR', locale='en_IN') if decimal_places == 0 else format_currency(val, grouping = True)
     except:
         return val
 

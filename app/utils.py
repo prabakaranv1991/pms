@@ -1,5 +1,4 @@
-import locale
-locale.setlocale(locale.LC_ALL, 'en_IN.utf8')
+from babel.numbers import format_currency
 
 def get_request_data(request, key):
     return {k[k.find("[")+1:k.rfind("]")]: v for k, v in request.POST.items() if k.startswith(key+'[')}.items()
@@ -26,9 +25,6 @@ def merge_dict(dict1, dict2, exclude=[]):
 
 def number_value(val, decimal_places=0):
     try:
-        if decimal_places == 0:
-            return locale.format("%d", int(val), grouping = True)
-        else:
-            return locale.format_string('%.2f', val, grouping = True)
+        return format_currency(int(val), 'INR', locale='en_IN') if decimal_places == 0 else format_currency(val, grouping = True)
     except:
         return val
