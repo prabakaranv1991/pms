@@ -8,7 +8,9 @@ RUN apt-get update
 
 RUN apt-get update && \
     apt-get install -y python3-pip \
-    locales && \
+    locales \
+    postgresql-client \
+    cron && \
     sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales
 
@@ -29,3 +31,8 @@ RUN export LC_ALL=en_IN.utf8
 COPY . .
 
 RUN rm -rf ~/.cache/pip
+
+# enabling cronjob for db backup
+RUN echo "0 */1 * * * PGPASSWORD=pms pg_dump -h db -U pms pms > /home/db_backup/pms_db_backup.sql\n" >> /home/mycron
+RUN crontab /home/mycron
+RUN touch /var/log/cron.log
