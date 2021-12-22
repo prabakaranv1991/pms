@@ -25,7 +25,7 @@
                         <span style="float:right">
                             {%if data.unpaid > 0 and data.completed %}
                                 <span class="badge  badge-danger">
-                                {{ data.outstanding_amount|number_value }} ({{ data.unpaid|number_value }})
+                                {{ data.outstanding_amount|number_value }} ({{ data.unpaid }})
                                 </span>
                             {%endif%}
                             {%if data.settlement_detail %}
