@@ -1,7 +1,7 @@
 from crud import *
 from django.db.models import Q
-from finance.forms import IncomeForm, FinanceSourceForm, ExpenseForm, CreditForm
-from finance.models import Income, FinanceSource, Expenses, MonthlyPayment, Credit, FinanceLoan, FinanceUtilized
+from finance.forms import *
+from finance.models import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from datetime import date
@@ -267,3 +267,20 @@ def finance_loan(request):
     return render(request, "finance_loan.html",
                   {'finance_details': finance_details, 'finance_loan': finance_data, 'source_list': source_list,
                    'total_emi': total_emi})
+
+class EmiList(ListView):
+    model = Emi
+    title = 'Emi'
+    name_field = 'card'
+
+
+class EmiCreate(CreateView):
+    form_class = EmiForm
+    model = Emi
+    title = 'Emi'
+
+
+class EmiUpdate(UpdateView):
+    form_class = EmiForm
+    model = Emi
+    title = 'Emi'

@@ -13,3 +13,16 @@ class Password(TimeStampedModel):
 
     def get_absolute_url(self):
         return '/other/password/'
+
+class Card(TimeStampedModel):
+    name = models.CharField(max_length=100)
+    type = models.CharField(max_length=50, choices=[('credit', 'Credit'), ('debit', 'Debit')])
+    bank = models.CharField(max_length=100, choices=[('icici', 'ICICI'), ('hdfc', 'HDFC'), ('sbi', 'SBI'), 
+    ('kvb', "KVB"), ('indian_bank', 'INDIAN BANK')])
+
+    class Meta:
+        db_table='dim_card'
+
+    def get_absolute_url(self):
+        return '/other/card/'
+

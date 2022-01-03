@@ -179,3 +179,16 @@ class FinanceUtilized(TimeStampedModel):
 
     class Meta:
         db_table = "fact_finance_utilized"
+
+class Emi(TimeStampedModel):
+    card = models.ForeignKey('other.Card', on_delete=models.CASCADE)
+    source = models.ForeignKey('FinanceSource', on_delete = models.CASCADE, null=True, blank=True)
+    emi_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    class Meta:
+        db_table = "fact_emi"
+
+    def get_absolute_url(self):
+        return '/finance/emi/'

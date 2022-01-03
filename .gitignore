@@ -1,2 +1,2 @@
 database/*
-*/migrations/*
+app/*/migrations/*

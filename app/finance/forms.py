@@ -1,5 +1,5 @@
 from django import forms
-from finance.models import Income, FinanceSource, Expenses, Credit
+from finance.models import *
 
 class FinanceSourceForm(forms.ModelForm):
     required_css_class = 'required'
@@ -30,5 +30,13 @@ class CreditForm(forms.ModelForm):
 
     class Meta:
         model = Credit
+        fields = '__all__'
+        exclude = ('created', 'modified', )
+
+class EmiForm(forms.ModelForm):
+    required_css_class = 'required'
+
+    class Meta:
+        model = Emi
         fields = '__all__'
         exclude = ('created', 'modified', )

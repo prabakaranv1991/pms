@@ -40,6 +40,9 @@ finance = [
     path('credit/', login_required(CreditList.as_view()), name="credit_list"),
     path('credit/create/', login_required(CreditCreate.as_view()), name="credit_create"),
     path('credit/<str:pk>/update/', login_required(CreditUpdate.as_view()), name='credit_update'),
+    path('emi/', login_required(EmiList.as_view()), name="emi_list"),
+    path('emi/create/', login_required(EmiCreate.as_view()), name="emi_create"),
+    path('emi/<str:pk>/update/', login_required(EmiUpdate.as_view()), name='emi_update'),
     path('loan/', finance_loan, name='finance_loan'),
 ]
 
@@ -47,6 +50,9 @@ other = [
     path('password/', login_required(PasswordList.as_view()), name='password'),
     path('password/create/', login_required(PasswordCreate.as_view()), name='password_create'),
     path('password/<str:pk>/update/', login_required(PasswordUpdate.as_view()), name='password_update'),
+    path('card/', login_required(CardList.as_view()), name='card'),
+    path('card/create/', login_required(CardCreate.as_view()), name='card_create'),
+    path('card/<str:pk>/update/', login_required(CardUpdate.as_view()), name='card_update'),
 ]
 
 urlpatterns = [
