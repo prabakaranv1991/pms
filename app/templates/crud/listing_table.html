@@ -24,9 +24,9 @@
                 {%if field == 'activation_link' %}
                     <span class="copy-btn" data-clipboard-text="{{ object|get_item:field }}"><a href="#">Copy Link</a></span>
                 {%elif field_type|get_item:field == 'IntegerField' %}
-                    {{ object|get_item:field|number_value }}
+                    {{ object|get_item:field }}
                 {%elif field_type|get_item:field == 'DecimalField' %}
-                    {{ object|get_item:field|number_value:1 }}
+                    {{ object|get_item:field|number_value }}
                 {%else%}
                     {{ object|get_item:field }}
                 {%endif%}

@@ -1,4 +1,4 @@
-from babel.numbers import format_currency
+from babel.numbers import format_currency, format_number
 
 def get_request_data(request, key):
     return {k[k.find("[")+1:k.rfind("]")]: v for k, v in request.POST.items() if k.startswith(key+'[')}.items()
@@ -25,6 +25,6 @@ def merge_dict(dict1, dict2, exclude=[]):
 
 def number_value(val, decimal_places=0):
     try:
-        return format_currency(int(val), 'INR', locale='en_IN') if decimal_places == 0 else format_currency(val, grouping = True)
+        return format_currency(int(val), 'INR', locale='en_IN') if decimal_places == 0 else format_number(val, locale='en_IN')
     except:
         return val

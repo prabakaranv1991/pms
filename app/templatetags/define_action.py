@@ -1,15 +1,15 @@
 from math import ceil
 from django import template
 from django.urls import resolve
-from babel.numbers import format_currency
+from babel.numbers import format_currency, format_number
 
 register = template.Library()
 
 @register.filter
 def number_value(val, decimal_places=0):
     try:
-        return format_currency(int(val), 'INR', locale='en_IN') if decimal_places == 0 else format_currency(val, grouping = True)
-    except:
+        return format_currency(int(val), 'INR', locale='en_IN') if decimal_places == 0 else format_number(val, locale='en_IN')
+    except Exception as e:
         return val
 
 @register.filter
