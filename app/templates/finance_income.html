@@ -1,62 +1,72 @@
 {% load util %}
 {% load humanize %}
 {% load mathfilters %}
-<table class="table table-bordered table-responsive-sm table-striped table-sm" style="white-space:nowrap">
+<table class="table table-sm table-bordered table-responsive table-striped" style="white-space:nowrap">
     <thead class="text-center">
-        <th>Sno</th><th>Income</th><th>Type</th><th>Source</th><th>Amount</th><th>Paid Amount</th><th>Paid Date</th>
+        <th>Sno</th><th>Income</th><th class="d-none d-lg-table-cell">Type</th>
+        <th class="d-none d-lg-table-cell">Source</th><th>Amount</th><th>Paid Amount</th><th class="d-none d-lg-table-cell">Paid Date</th>
     </thead>
     <tbody>
         {%include 'finance_income_list.html' with data_list=monthly_payment_data.income sno_start=0 type='income' %}
         {%include 'finance_income_list.html' with data_list=monthly_payment_data.credit sno_start=monthly_payment_data.income|length type='credit' %}
-        {%for row in extra_rows.income %}<tr><td colspan="7">&nbsp;</td></tr>{%endfor%}
+        {%for row in extra_rows.income %}<tr><td colspan="4">&nbsp;</td><td colspan="3" class="d-none d-lg-table-cell"></td></tr>{%endfor%}
         <tr>
-            <th colspan="7">
+            <th colspan="4">
                 <select class="form-control" name="new_income">
-                    <option value="">Choose Income to add</option>
-                    <optgroup label="Income">
-                    {%for income in monthly_payment_data.income_list %}<option value="{{income.id}}">{{ income.name }} ({{ income.type|title }})</option>{%endfor%}
-                    </optgroup>
-                    <optgroup label="Credit">
-                    {%for credit in monthly_payment_data.credit_list %}
-                        <option value="c{{credit.id}}">
-                            {{ credit.source }} ({{ credit.amount|sub:credit.paid_amount|number_value }}) {%if credit.expected_date%}  - Exp: {{ credit.expected_date }}{%endif%}
-                        </option>{%endfor%}
-                    </optgroup>
+                <option value="">Choose Income to add</option>
+                <optgroup label="Income">
+                {%for income in monthly_payment_data.income_list %}<option value="{{income.id}}">{{ income.name }} ({{ income.type|title }})</option>{%endfor%}
+                </optgroup>
+                <optgroup label="Credit">
+                {%for credit in monthly_payment_data.credit_list %}
+                    <option value="c{{credit.id}}">
+                        {{ credit.source }} ({{ credit.amount|sub:credit.paid_amount|number_value }}) {%if credit.expected_date%}  - Exp: {{ credit.expected_date }}{%endif%}
+                    </option>{%endfor%}
+                </optgroup>
                 </select>
             </th>
+            <th colspan="3" class="d-none d-lg-table-cell"></th>
         </tr>
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="3" class="text-right">Total</th>
+            <td colspan="2" class="d-none d-lg-table-cell"></td>
+            <th colspan="2" class="text-right">Total</th>
             <th class="text-right text-success">{{ monthly_payment_data.income_total|number_value}}</th>
             <th class="text-right text-success">{{ monthly_payment_data.income_paid|number_value}}</th>
-            <th colspan="2"></th>
+            <th class="d-none d-lg-table-cell"></th>
         </tr>
         <tr>
-            <th colspan="3" class="text-right">Balance</th>
+            <td colspan="2" class="d-none d-lg-table-cell"></td>
+            <th colspan="2" class="text-right">Balance</th>
             <th class="text-right text-success"></th>
             <th class="text-right text-success">{{ monthly_payment_data.income_total|sub:monthly_payment_data.income_paid|number_value}}</th>
-            <th colspan="2"></th>
+            <th class="d-none d-lg-table-cell"></th>
         </tr>
         <tr>
-            <th colspan="3" class="text-right">Cash Balance</th>
+            <td colspan="2" class="d-none d-lg-table-cell"></td>
+            <th colspan="2" class="text-right">Cash Balance</th>
             {%with savings=monthly_payment_data.income_total|sub:monthly_payment_data.expense_total%}
             <th class="text-right text-{%if savings > 0 %}success{%else%}danger{%endif%}">
                 {{ monthly_payment_data.income_total|sub:monthly_payment_data.expense_total|number_value }}
             </th>
             {%endwith%}
-            <th colspan="3"></th>
+            <th></th>
+            <th class="d-none d-lg-table-cell"></th>
         </tr>
-    </tfoot>
-</table>
-<table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
-    <tbody><tr>
+    <tr>
+        <td colspan="4">
+            <table class="table table-sm table-bordered table-responsive table-striped" style="white-space:nowrap">
+                <tr>
         {%for header, value in monthly_payment_data.income_group.items %}
             <th>{{header}}</th>
             <td class="text-right">{{value|number_value}}</td>
             {%if forloop.counter|divisibleby:2 and forloop.counter != monthly_payment_data.income_group.items|length %}</tr><tr>{%endif%}
         {%endfor%}
-    </tbody>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    </tfoot>
 
 </table>

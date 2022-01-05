@@ -4,191 +4,189 @@
 <form method="POST" id="payment_form">
     {% csrf_token %}
     <input type="hidden" name="chit" value="{{ chit_detail.id }}"/>
-    <div class="nav-tabs-boxed nav-tabs-boxed-right">
-        <ul class="nav nav-tabs" role="tablist">
-            {% for month, data in chit_detail.items %}
-            <li class="nav-item col-md-12">
-                <a class="nav-link {%if data.current_month %}active{%endif%}" data-toggle="tab"
-                   href="#payment_detail_{{ forloop.counter }}" role="tab" aria-controls="home"
-                   aria-selected="{{ data.current_month }}">
-                    <span style="color: #000">
-                        <b>
-                        {%if data.current_month == True %}
-                            <span class="text-warning">{{ 'arrow-thick-left'|icon|safe }}</span>
-                        {%elif data.completed == True %}
-                            <span class="text-success">{{ 'check'|icon|safe }}</span>
-                        {%else%}
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                        {%endif%}
-                        </b>
-                        <b>{{ forloop.counter }}</b>.&nbsp;{{ month|date:"M Y" }}
-                        <span style="float:right">
-                            {%if data.unpaid > 0 and data.completed %}
-                                <span class="badge  badge-danger">
-                                {{ data.outstanding_amount|number_value }} ({{ data.unpaid }})
+    <div class="tab-content rounded-bottom">
+        {% for month, data in chit_detail.items %}
+        <div class="tab-pane {%if data.current_month %}active{%endif%}" id="payment_detail_{{ forloop.counter }}"
+                role="tabpanel">
+            <div class="row">
+                <div class="col-md-5">
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
+                        <thead>
+                            <th colspan="2" class="text-center">Payment Status</th>
+                        </thead>
+                        <tbody>
+                        {%for id,customer_data in customers.items %}
+                        <tr>
+                            <td style="width:5px" align="center">
+                                <input id="payment_{{month|date:" YM"}}_{{ customer_data.customer.id }}" class="payment"
+                                type="checkbox" data-month="{{ month|date:"Y-m-d" }}"
+                                data-customer="{{ customer_data.customer.id }}" value=""
+                                {%if customer_data.customer.id in data.paid_customers %}
+                                checked=True disabled=True
+                                {%endif%}
+                                />
+                            </td>
+                            <td>
+                                <label style="width:100%" class="form-check-label" for="payment_{{month|date:" YM"}}_{{
+                                customer_data.customer.id }}">
+                                <span class="text-{%if customer_data.customer.id in data.paid_customers %}success{%else%}danger{%endif%}">
+                                    <b>{{ customer_data.customer.name }}</b>
                                 </span>
-                            {%endif%}
-                            {%if data.settlement_detail %}
-                                <span class="badge badge-{%if data.settlement_detail.paid == True %}success{%else%}danger{%endif%} text-left" style="min-width:100px">
-                                    {%if data.settlement_detail.paid == True %}
-                                        {{ 'check-alt'|icon|safe }}
-                                    {%else%}
-                                        {{ 'x'|icon|safe }}
-                                    {%endif%}
-                                    {{data.settlement_detail.customer__name}}
-                                </span>
-                            {%endif%}
-                            <span class="badge  badge-warning" style="min-width:50px">
-                                {{ data.chit_amount|number_value }}
-                            </span>
-                        </span>
-                    </span>
-                </a>
-                {%if data.completed %}
-                <div class="progress progress-xs">
-                    <div class="progress-bar bg-{% percentage_style data.paid_percentage %}" role="progressbar"
-                         style="width: {%if data.paid_percentage == 0 %}100{%else%}{{ data.paid_percentage }}{%endif%}%"
-                         aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </label>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                        </tbody>
+                    </table>
                 </div>
-                {%endif%}
-            </li>
-            {%endfor%}
-        </ul>
-        <div class="tab-content col-md-6">
-            {% for month, data in chit_detail.items %}
-            <div class="tab-pane {%if data.current_month %}active{%endif%}" id="payment_detail_{{ forloop.counter }}"
-                 role="tabpanel">
-                <div class="row">
-                    <div class="col-md-5">
-                        <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
-                            <thead>
-                                <th colspan="2" class="text-center">Payment Status</th>
-                            </thead>
+                <div class="col-md-7">
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
+                            <thead><tr><td colspan="2" class="text-center"><b>Summary</b> {%if data.pre_booked == True %}<span class="text-danger">*</span>Pre-Booked{%endif%}</td></tr></thead>
                             <tbody>
-                            {%for id,customer_data in customers.items %}
                             <tr>
-                                <td style="width:5px" align="center">
-                                    <input id="payment_{{month|date:" YM"}}_{{ customer_data.customer.id }}" class="payment"
-                                    type="checkbox" data-month="{{ month|date:"Y-m-d" }}"
-                                    data-customer="{{ customer_data.customer.id }}" value=""
-                                    {%if customer_data.customer.id in data.paid_customers %}
-                                    checked=True disabled=True
-                                    {%endif%}
-                                    />
-                                </td>
-                                <td>
-                                    <label style="width:100%" class="form-check-label" for="payment_{{month|date:" YM"}}_{{
-                                    customer_data.customer.id }}">
-                                    <span class="text-{%if customer_data.customer.id in data.paid_customers %}success{%else%}danger{%endif%}">
-                                        <b>{{ customer_data.customer.name }}</b>
-                                    </span>
-                                    </label>
+                                <td>Chit Amount</td>
+                                <td class="text-right">{{ data.chit_amount|number_value }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Paid <span class="badge badge-success">{{ data.paid_customers|length }}</span></td>
+                                <td class="text-right">{{ data.paid_amount|number_value }}</td>
+                            </tr>
+                            <tr>
+                                <td>Pending Amount <span class="badge badge-danger">{{ data.unpaid }}</span></td>
+                                <td class="text-right">{{ data.outstanding_amount|number_value }}</td>
+                            </tr></tbody>
+                            <tfoot><tr>
+                                <td>Total</td>
+                                <td class="text-right text-success">{{ data.settlement_amount|add:data.commission_amount|number_value }}</td>
+                            </tr>
+                            <tr>
+                                <td>Commission</td>
+                                <td class="text-right text-danger">({{ data.commission_amount|number_value }})</td>
+                            </tr>
+                            <tr>
+                                <td>Chit Amount</td>
+                                <td class="text-right text-danger">({{ data.chit_amount|number_value }})</td>
+                            </tr>
+                            <tr>
+                                <th>Settlement Amount</th>
+                                <th class="text-right text-success">{{ data.settlement_amount|sub:data.chit_amount|number_value }}</th>
+                            </tr>
+                            {%if data.preferred_to.customer > 0 and data.completed == True %}
+                            <tr>
+                                <th>To</th>
+                                <td class="text-right">
+                                        <input type="hidden" value="{{ data.preferred_to.customer }}" class="paid_to" data-month="{{month|date:"Y-m-01"}}" />
+                                        <input type="hidden" value="{{ data.settlement_amount }}" class="paid_value" data-month="{{month|date:"Y-m-01"}}" />
+                                        <b>{{ data.preferred_to.customer__name }}</b>
                                 </td>
                             </tr>
-                            {%endfor%}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-7">
-                        <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
-                                <thead><tr><td colspan="2" class="text-center"><b>Summary</b> {%if data.pre_booked == True %}<span class="text-danger">*</span>Pre-Booked{%endif%}</td></tr></thead>
-                                <tbody>
-                                <tr>
-                                    <td>Chit Amount</td>
-                                    <td class="text-right">{{ data.chit_amount|number_value }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Total Paid <span class="badge badge-success">{{ data.paid_customers|length }}</span></td>
-                                    <td class="text-right">{{ data.paid_amount|number_value }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Pending Amount <span class="badge badge-danger">{{ data.unpaid }}</span></td>
-                                    <td class="text-right">{{ data.outstanding_amount|number_value }}</td>
-                                </tr></tbody>
-                                <tfoot><tr>
-                                    <td>Total</td>
-                                    <td class="text-right text-success">{{ data.settlement_amount|add:data.commission_amount|number_value }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Commission</td>
-                                    <td class="text-right text-danger">({{ data.commission_amount|number_value }})</td>
-                                </tr>
-                                <tr>
-                                    <td>Chit Amount</td>
-                                    <td class="text-right text-danger">({{ data.chit_amount|number_value }})</td>
-                                </tr>
-                                <tr>
-                                    <th>Settlement Amount</th>
-                                    <th class="text-right text-success">{{ data.settlement_amount|sub:data.chit_amount|number_value }}</th>
-                                </tr>
-                                {%if data.preferred_to.customer > 0 and data.completed == True %}
-                                <tr>
-                                    <th>To</th>
-                                    <td class="text-right">
-                                            <input type="hidden" value="{{ data.preferred_to.customer }}" class="paid_to" data-month="{{month|date:"Y-m-01"}}" />
-                                            <input type="hidden" value="{{ data.settlement_amount }}" class="paid_value" data-month="{{month|date:"Y-m-01"}}" />
-                                            <b>{{ data.preferred_to.customer__name }}</b>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Paid</th>
-                                    <td class="text-right">
-                                        {%if data.settlement_detail.paid == True %}
-                                            <span class="text-success"><b>Yes</b></span>
-                                        {%else%}
-                                            <input type="checkbox" class="paid_status" data-month="{{month|date:"Y-m-01"}}" value="True" />
-                                        {%endif%}
-                                    </td>
-                                </tr>
-                                {%endif%}
-                                </tfoot>
-                        </table>
-                        {%if data.current_month and data.pre_booked == False %}
-                            <hr />
-                            <input type="hidden" name="betting_month" value="{{month|date:"Y-m-01"}}" />
-                            <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
-                            <thead><tr><th colspan="3" class="text-center">Betting</th></tr></thead>
-                            <tbody>
-                                {%for betting_data in data.settlement_detail.betting %}
-                                {%with customer_detail=customers|get_item:betting_data.0 %}
-                                <tr>
-                                    <td>{{customer_detail.customer.name}}</td>
-                                    <td class="text-right">{{ betting_data.1|number_value }}</td>
-                                </tr>
-                                {%endwith%}
-                                {%endfor%}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3">
-                                        <div class="form-group row">
-                                            <label class="col-sm-5 col-form-label" for="betting_customer">Name</label>
-                                            <div class="col-sm-6">
-                                                <select class="form-control form-control-sm" id="betting_customer" name="betting_customer">
-                                                    <option value="0">Choose</option>
-                                                    {%for id,customer_data in customers.items %}
-                                                        <option value="{{customer_data.customer.id}}">{{ customer_data.customer.name }}</option>
-                                                    {%endfor%}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-5 col-form-label" for="betting_value">Value</label>
-                                            <div class="col-sm-6">
-                                                <input class="form-control form-control-sm" id="betting_value" type="number" placeholder="Enter Betting Value" name="betting_value" />
-                                            </div>
-                                        </div>
-                                        <center><input type="submit" class="btn btn-sm btn-success" value="Update" /></center>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <th>Paid</th>
+                                <td class="text-right">
+                                    {%if data.settlement_detail.paid == True %}
+                                        <span class="text-success"><b>Yes</b></span>
+                                    {%else%}
+                                        <input type="checkbox" class="paid_status" data-month="{{month|date:"Y-m-01"}}" value="True" />
+                                    {%endif%}
+                                </td>
+                            </tr>
+                            {%endif%}
                             </tfoot>
-                        </table>
-                        {%endif%}
-                    </div>
-
+                    </table>
+                    {%if data.current_month and data.pre_booked == False %}
+                        <hr />
+                        <input type="hidden" name="betting_month" value="{{month|date:"Y-m-01"}}" />
+                        <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
+                        <thead><tr><th colspan="3" class="text-center">Betting</th></tr></thead>
+                        <tbody>
+                            {%for betting_data in data.settlement_detail.betting %}
+                            {%with customer_detail=customers|get_item:betting_data.0 %}
+                            <tr>
+                                <td>{{customer_detail.customer.name}}</td>
+                                <td class="text-right">{{ betting_data.1|number_value }}</td>
+                            </tr>
+                            {%endwith%}
+                            {%endfor%}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="form-group row">
+                                        <label class="col-sm-5 col-form-label" for="betting_customer">Name</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control form-control-sm" id="betting_customer" name="betting_customer">
+                                                <option value="0">Choose</option>
+                                                {%for id,customer_data in customers.items %}
+                                                    <option value="{{customer_data.customer.id}}">{{ customer_data.customer.name }}</option>
+                                                {%endfor%}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-5 col-form-label" for="betting_value">Value</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control form-control-sm" id="betting_value" type="number" placeholder="Enter Betting Value" name="betting_value" />
+                                        </div>
+                                    </div>
+                                    <center><input type="submit" class="btn btn-sm btn-success" value="Update" /></center>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    {%endif%}
                 </div>
+
             </div>
-            {%endfor%}
         </div>
+        {%endfor%}
     </div>
+    <ul class="nav nav-tabs" role="tablist">
+        {% for month, data in chit_detail.items %}
+        <li class="nav-item" style="min-width:350px">
+            <a class="nav-link {%if data.current_month %}active{%endif%}" data-toggle="tab"
+                href="#payment_detail_{{ forloop.counter }}" role="tab" aria-controls="home"
+                aria-selected="{{ data.current_month }}">
+                <span style="color: #000">
+                    <b>
+                    {%if data.current_month == True %}
+                        <span class="text-warning">{{ 'arrow-thick-left'|icon|safe }}</span>
+                    {%elif data.completed == True %}
+                        <span class="text-success">{{ 'check'|icon|safe }}</span>
+                    {%else%}
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                    {%endif%}
+                    </b>
+                    <b>{{ forloop.counter }}</b>.&nbsp;{{ month|date:"M Y" }}
+                    <span style="float:right">
+                        {%if data.unpaid > 0 and data.completed %}
+                            <span class="badge  badge-danger">
+                            {{ data.outstanding_amount|number_value }} ({{ data.unpaid }})
+                            </span>
+                        {%endif%}
+                        {%if data.settlement_detail %}
+                            <span class="badge badge-{%if data.settlement_detail.paid == True %}success{%else%}danger{%endif%} text-left" style="min-width:100px">
+                                {%if data.settlement_detail.paid == True %}
+                                    {{ 'check-alt'|icon|safe }}
+                                {%else%}
+                                    {{ 'x'|icon|safe }}
+                                {%endif%}
+                                {{data.settlement_detail.customer__name}}
+                            </span>
+                        {%endif%}
+                        <span class="badge  badge-warning" style="min-width:50px">
+                            {{ data.chit_amount|number_value }}
+                        </span>
+                    </span>
+                </span>
+            </a>
+            {%if data.completed %}
+            <div class="progress progress-xs">
+                <div class="progress-bar bg-{% percentage_style data.paid_percentage %}" role="progressbar"
+                        style="width: {%if data.paid_percentage == 0 %}100{%else%}{{ data.paid_percentage }}{%endif%}%"
+                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            {%endif%}
+        </li>
+        {%endfor%}
+    </ul>
 </form>

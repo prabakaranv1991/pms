@@ -3,7 +3,7 @@
 {% load mathfilters %}
 <table class="table table-bordered table-responsive-sm table-striped table-sm" style="white-space:nowrap">
     <thead class="text-center">
-        <th>Sno</th><th>Expense</th><th>Type</th><th>Amount</th><th>Paid Amount</th><th>Paid Date</th>
+        <th>Sno</th><th>Expense</th><th class="d-none d-lg-table-cell">Type</th><th>Amount</th><th>Paid Amount</th><th class="d-none d-lg-table-cell">Paid Date</th>
     </thead>
     <tbody>
         {%for expense in monthly_payment_data.expense%}
@@ -14,7 +14,7 @@
                 {{ expense.name }}
                 {%if expense.paid_amount == expense.amount %}</del>{%endif%}
             </td>
-            <td>{{ expense.type }}</td>
+            <td class="d-none d-lg-table-cell">{{ expense.type }}</td>
             <td class="text-right">
                 {%if expense.pay_type == 'Changeable' %}
                     <input type="text" name="expense[{{ expense.id }}]" value="{{ expense.amount }}" class="form-control text-right amount_edit" style="padding-right: 0px; padding-top:0px; display:none">
@@ -33,7 +33,7 @@
                     <input type="text" name="expense_paid[{{ expense.id }}]" value="{{ expense.paid_amount }}" class="paid_amount form-control text-right" style="padding-right: 0px; padding-top:0px; display:none; width:90px">
                 {%endif%}
             </td>
-            <td class="text-center">
+            <td class="text-center d-none d-lg-table-cell">
                 {{ expense.paid_date|date:"d' M" }}
                 <input type="hidden" name="expense_paid_date[{{ expense.id }}]" value="{%if expense.paid_date%}{{ expense.paid_date|date:"Y-m-d" }}{%else%}{% now "Y-m-d" %}{%endif%}">
             </td>
@@ -42,28 +42,31 @@
             {%endif%}
         </tr>
         {%endfor%}
-        {%for row in extra_rows.expense %}<tr><td colspan="6">&nbsp;</td></tr>{%endfor%}
+        {%for row in extra_rows.expense %}<tr><td colspan="4">&nbsp;</td><td colspan="3" class="d-none d-lg-table-cell"></td></tr>{%endfor%}
         <tr>
-            <th colspan="6">
+            <th colspan="4">
                 <select class="form-control" name="new_expense">
                     <option value="">Choose Expense to add</option>
                     {%for expense in monthly_payment_data.expense_list %}<option value="{{expense.id}}">{{ expense.name }}</option>{%endfor%}
                 </select>
             </th>
+            <th colspan="3" class="d-none d-lg-table-cell"></th>
         </tr>
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="3" class="text-right">Total</th>
+            <th class="d-none d-lg-table-cell"></th>
+            <th colspan="2" class="text-right">Total</th>
             <th class="text-right text-danger">{{ monthly_payment_data.expense_total|number_value }}</th>
             <th class="text-right text-danger">{{ monthly_payment_data.expense_paid|number_value }}</th>
-            <th></th>
+            <th class="d-none d-lg-table-cell"> </th>
         </tr>
         <tr>
-            <th colspan="3" class="text-right">Balance</th>
+            <th class="d-none d-lg-table-cell"></th>
+            <th colspan="2" class="text-right">Balance</th>
             <th></th>
             <th class="text-right text-danger">{{ monthly_payment_data.expense_total|sub:monthly_payment_data.expense_paid|number_value }}</th>
-            <th></th>
+            <th class="d-none d-lg-table-cell"></th>
         </tr>
     </tfoot>
 </table>

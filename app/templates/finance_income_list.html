@@ -9,12 +9,12 @@
         {{ data.name }}
         {%if data.paid_amount == data.amount %}</del>{%endif%}
     </td>
-    <td>
+    <td class="d-none d-lg-table-cell">
 
         {%if type == 'credit' %}Credit{%else%}{{ data.type }}{%endif%}
     </td>
     {% ifchanged data.source %}
-    <td rowspan="{{ monthly_payment_data.row_span.income|get_item:data.source  }}" style="vertical-align:middle;">
+    <td  class="d-none d-lg-table-cell" rowspan="{{ monthly_payment_data.row_span.income|get_item:data.source  }}" style="vertical-align:middle;">
         {{ data.source }}
     </td>
     {%endifchanged%}
@@ -37,7 +37,7 @@
             <input type="text" name="{{ type }}_paid[{{ data.id }}]" value="{{ data.paid_amount }}" class="paid_amount form-control text-right" style="padding-right: 0px; padding-top:0px; display:none; width:90px">
         {%endif%}
     </td>
-    <td class="text-center">
+    <td class="text-center d-none d-lg-table-cell"">
         {{ data.paid_date|date:"d' M" }}
         <input type="hidden" name="{{ type }}_paid_date[{{ data.id }}]" value="{%if data.paid_date%}{{ data.paid_date|date:"Y-m-d" }}{%else%}{% now "Y-m-d" %}{%endif%}">
     </td>
