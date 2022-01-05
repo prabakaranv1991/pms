@@ -180,6 +180,18 @@ class FinanceUtilized(TimeStampedModel):
     class Meta:
         db_table = "fact_finance_utilized"
 
+    @staticmethod
+    def utilized(finance):
+        data_tmp = {}
+        source_list = []
+        for utilized in FinanceUtilized.objects.filter(finance=finance).order_by('paid_date', 'source__name'):
+            if utilized.paid_date not in data_tmp: data_tmp[utilized.paid_date] = {}
+            data_tmp[utilized.paid_date][utilized.source.id] = [((utilized.amount / 100) * finance.roi) / 12,
+                                                                utilized.amount, utilized.paid_amount,
+                                                                utilized.payment_type]
+            if utilized.source not in source_list: source_list.append(utilized.source)
+        return source_list,data_tmp
+
 class Emi(TimeStampedModel):
     card = models.ForeignKey('other.Card', on_delete=models.CASCADE)
     source = models.ForeignKey('FinanceSource', on_delete = models.CASCADE, null=True, blank=True)

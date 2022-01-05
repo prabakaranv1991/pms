@@ -226,6 +226,31 @@ def finance_loan(request):
                                                payment_type='withdraw')
             except:
                 pass
+        for finance in FinanceLoan.objects.all():
+            source_list, data_tmp = FinanceUtilized.utilized(finance)
+            pre_data = {}
+            finance_data = {}
+            for date_str in data_tmp.keys():
+                for source in source_list:
+                    try:
+                        finance_data[source.id] = data_tmp[date_str][source.id]
+                        pre_data[source.id] = data_tmp[date_str][source.id]
+                    except:
+                        try:
+                            finance_data[source.id] = [pre_data[source.id][0], pre_data[source.id][1],
+                                                                            None, None]
+                        except:
+                            finance_data[source.id] = [0, 0, None, None]
+            for source, data in finance_data.items():
+                try:
+                    income = Income.objects.get(source_id=source, finance=finance)
+                    if date.today().month == 12:
+                        filter = {'month__year__gt': date.today().year, 'month__month': 1, 'income': income}
+                    else:
+                        filter = {'month__year__gte': date.today().year, 'month__month__gte': date.today().month, 'income': income}
+                    MonthlyPayment.objects.filter(**filter).update(amount=data[0])
+                except:
+                    pass
 
     finance_details = {}
     total_emi = {}
@@ -234,23 +259,16 @@ def finance_loan(request):
     for finance in FinanceLoan.objects.filter(status=True):
         finance_details[finance.id] = finance
         total_outstanding = 0
-        for data in FinanceUtilized.objects.filter(finance=finance).order_by('source_id', '-created').distinct(
-            'source_id'): total_outstanding += data.amount
+        for data in FinanceUtilized.objects.filter(finance=finance).order_by('source_id', '-created').distinct('source_id'): 
+            total_outstanding += data.amount
         finance.utilized_amount = total_outstanding
         finance.save()
 
         total_emi[finance.id] = [((finance.utilized_amount / 100) * finance.roi) / 12, finance.utilized_amount,
                                  finance.loan_amount - finance.utilized_amount]
         finance_data[finance.id] = {}
-        source_list[finance.id] = []
-        data_tmp = {}
+        source_list[finance.id], data_tmp = FinanceUtilized.utilized(finance)
         pre_data = {}
-        for utilized in FinanceUtilized.objects.filter(finance=finance).order_by('paid_date', 'source__name'):
-            if utilized.paid_date not in data_tmp: data_tmp[utilized.paid_date] = {}
-            data_tmp[utilized.paid_date][utilized.source.id] = [((utilized.amount / 100) * finance.roi) / 12,
-                                                                utilized.amount, utilized.paid_amount,
-                                                                utilized.payment_type]
-            if utilized.source not in source_list[finance.id]: source_list[finance.id].append(utilized.source)
         for date_str in data_tmp.keys():
             finance_data[finance.id][date_str] = {}
             for source in source_list[finance.id]:
