@@ -247,10 +247,16 @@ def finance_loan(request):
                     if date.today().month == 12:
                         filter = {'month__year__gt': date.today().year, 'month__month': 1, 'income': income}
                     else:
-                        filter = {'month__year__gte': date.today().year, 'month__month__gte': date.today().month, 'income': income}
+                        filter = {'month__year__gte': date.today().year, 'month__month__gt': date.today().month, 'income': income}
                     MonthlyPayment.objects.filter(**filter).update(amount=data[0])
                 except:
                     pass
+            expense = Expenses.objects.get(finance=finance)
+            if date.today().month == 12:
+                filter = {'month__year__gt': date.today().year, 'month__month': 1, 'expense': expense}
+            else:
+                filter = {'month__year__gte': date.today().year, 'month__month__gt': date.today().month, 'expense': expense}
+            MonthlyPayment.objects.filter(**filter).update(amount=((finance.utilized_amount / 100) * finance.roi) / 12)
 
     finance_details = {}
     total_emi = {}
