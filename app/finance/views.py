@@ -244,19 +244,13 @@ def finance_loan(request):
             for source, data in finance_data.items():
                 try:
                     income = Income.objects.get(source_id=source, finance=finance)
-                    if date.today().month == 12:
-                        filter = {'month__year__gt': date.today().year, 'month__month': 1, 'income': income}
-                    else:
-                        filter = {'month__year__gte': date.today().year, 'month__month__gt': date.today().month, 'income': income}
-                    MonthlyPayment.objects.filter(**filter).update(amount=data[0])
+                    income.amount = data[0]
+                    income.save()
                 except:
                     pass
             expense = Expenses.objects.get(finance=finance)
-            if date.today().month == 12:
-                filter = {'month__year__gt': date.today().year, 'month__month': 1, 'expense': expense}
-            else:
-                filter = {'month__year__gte': date.today().year, 'month__month__gt': date.today().month, 'expense': expense}
-            MonthlyPayment.objects.filter(**filter).update(amount=((finance.utilized_amount / 100) * finance.roi) / 12)
+            expense.amount = ((finance.utilized_amount / 100) * finance.roi) / 12
+            expense.save()            
 
     finance_details = {}
     total_emi = {}

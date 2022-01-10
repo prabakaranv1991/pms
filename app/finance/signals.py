@@ -6,6 +6,6 @@ from datetime import date
 @receiver(post_save, sender=Income)
 @receiver(post_save, sender=Expenses)
 def update_monthly_payment(sender, instance, **kwargs):
-        filter = {'month__year__gte': date.today().year, 'month__month__gte': date.today().month}
+        filter = {'month__year__gte': date.today().year, 'month__month__gte': date.today().month, 'paid_amount': 0}
         filter['income' if sender == Income else 'expense' ] = instance
         MonthlyPayment.objects.filter(**filter).update(amount=instance.amount)
