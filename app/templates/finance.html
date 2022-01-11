@@ -22,9 +22,9 @@
                             <b>Finance</b>
                             <div class="card-header-actions">
                                 <a href="/finance/loan/" target="_blank" class="card-header-action"><b>Finance</b></a> |
-                                <a href="/finance/credit/" target="_blank" class="card-header-action"><b>Credit</b></a> |
-                                <a href="/finance/income/" target="_blank" class="card-header-action"><b>Income</b></a> |
-                                <a href="/finance/expense/" target="_blank" class="card-header-action"><b>Expense</b></a> |
+                                <a href="/finance/credit/" target="_blank" class="card-header-action" title="Credit"><b>Cr</b></a> |
+                                <a href="/finance/income/" target="_blank" class="card-header-action" title="Income"><b>Inc</b></a> |
+                                <a href="/finance/expense/" target="_blank" class="card-header-action" title="Expense"><b>Exp</b></a> |
                                 <a class="card-header-action">
                                     <select name="month">
                                         {%for month_name in month_list %}
@@ -64,6 +64,8 @@
 <script src='/static/fullcalender/main.js'></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        $("#new_income_row").attr("colspan", $("#income_list thead th:visible").length)
+        $("#new_expense_row").attr("colspan", $("#expense_list thead th:visible").length)
         $("[name=month]").on("change", function(){
             window.location = '{% url 'chit' %}?month='+ $(this).val()
         })

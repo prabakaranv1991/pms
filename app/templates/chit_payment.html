@@ -10,7 +10,7 @@
                 role="tabpanel">
             <div class="row">
                 <div class="col-md-5">
-                    <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
+                    <table class="table table-bordered table-striped table-sm" style="white-space:nowrap">
                         <thead>
                             <th colspan="2" class="text-center">Payment Status</th>
                         </thead>
@@ -40,7 +40,7 @@
                     </table>
                 </div>
                 <div class="col-md-7">
-                    <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
+                    <table class="table table-bordered table-striped table-sm" style="white-space:nowrap">
                             <thead><tr><td colspan="2" class="text-center"><b>Summary</b> {%if data.pre_booked == True %}<span class="text-danger">*</span>Pre-Booked{%endif%}</td></tr></thead>
                             <tbody>
                             <tr>
@@ -94,9 +94,10 @@
                             </tfoot>
                     </table>
                     {%if data.current_month and data.pre_booked == False %}
+                        {%if data.settlement_detail.paid != True %}
                         <hr />
                         <input type="hidden" name="betting_month" value="{{month|date:"Y-m-01"}}" />
-                        <table class="table table-responsive-sm table-bordered table-striped table-sm" style="white-space:nowrap">
+                        <table class="table table-bordered table-striped table-sm" style="white-space:nowrap">
                         <thead><tr><th colspan="3" class="text-center">Betting</th></tr></thead>
                         <tbody>
                             {%for betting_data in data.settlement_detail.betting %}
@@ -133,6 +134,7 @@
                             </tr>
                         </tfoot>
                     </table>
+                    {%endif%}
                     {%endif%}
                 </div>
 

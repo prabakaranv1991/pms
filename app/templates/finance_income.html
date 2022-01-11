@@ -1,7 +1,7 @@
 {% load util %}
 {% load humanize %}
 {% load mathfilters %}
-<table class="table table-sm table-bordered table-responsive table-striped" style="white-space:nowrap">
+<table class="table table-sm table-bordered table-striped" style="white-space:nowrap" id="income_list">
     <thead class="text-center">
         <th>Sno</th><th>Income</th><th class="d-none d-lg-table-cell">Type</th>
         <th class="d-none d-lg-table-cell">Source</th><th>Amount</th><th>Paid Amount</th><th class="d-none d-lg-table-cell">Paid Date</th>
@@ -11,7 +11,7 @@
         {%include 'finance_income_list.html' with data_list=monthly_payment_data.credit sno_start=monthly_payment_data.income|length type='credit' %}
         {%for row in extra_rows.income %}<tr><td colspan="4">&nbsp;</td><td colspan="3" class="d-none d-lg-table-cell"></td></tr>{%endfor%}
         <tr>
-            <th colspan="4">
+            <th colspan="4" id="new_income_row">
                 <select class="form-control" name="new_income">
                 <option value="">Choose Income to add</option>
                 <optgroup label="Income">
@@ -25,7 +25,7 @@
                 </optgroup>
                 </select>
             </th>
-            <th colspan="3" class="d-none d-lg-table-cell"></th>
+            <!--<th colspan="3" class="d-none d-lg-table-cell"></th>-->
         </tr>
     </tbody>
     <tfoot>
@@ -54,19 +54,14 @@
             <th></th>
             <th class="d-none d-lg-table-cell"></th>
         </tr>
-    <tr>
-        <td colspan="4">
-            <table class="table table-sm table-bordered table-responsive table-striped" style="white-space:nowrap">
-                <tr>
-        {%for header, value in monthly_payment_data.income_group.items %}
-            <th>{{header}}</th>
-            <td class="text-right">{{value|number_value}}</td>
-            {%if forloop.counter|divisibleby:2 and forloop.counter != monthly_payment_data.income_group.items|length %}</tr><tr>{%endif%}
-        {%endfor%}
-                </tr>
-            </table>
-        </td>
-    </tr>
     </tfoot>
-
+</table>
+<table class="table table-sm table-bordered table-striped" style="white-space:nowrap">
+    <tr>
+{%for header, value in monthly_payment_data.income_group.items %}
+<th>{{header}}</th>
+<td class="text-right">{{value|number_value}}</td>
+{%if forloop.counter|divisibleby:2 and forloop.counter != monthly_payment_data.income_group.items|length %}</tr><tr>{%endif%}
+{%endfor%}
+    </tr>
 </table>
