@@ -71,7 +71,7 @@
                                                         (<span class=" text-{%if data|get_item:source.id|get_item:3 == 'repayment' %}danger{%else%}success{%endif%}">
                                                         <strong>{{ data|get_item:source.id|get_item:2|number_value }}</strong>
                                                         </span>)
-                                                    {%endif%}
+                                                    {%endif%}<br>
                                                     {{ data|get_item:source.id|get_item:1|number_value }}
                                                 </td>
                                                 <td class="text-right">{{ data|get_item:source.id|get_item:0|number_value }}</td>

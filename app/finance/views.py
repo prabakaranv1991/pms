@@ -248,6 +248,11 @@ def finance_loan(request):
                     income.save()
                 except:
                     pass
+            total_outstanding = 0
+            for data in FinanceUtilized.objects.filter(finance=finance).order_by('source_id', '-created').distinct('source_id'): 
+                total_outstanding += data.amount
+            finance.utilized_amount = total_outstanding
+            finance.save()
             expense = Expenses.objects.get(finance=finance)
             expense.amount = ((finance.utilized_amount / 100) * finance.roi) / 12
             expense.save()            
@@ -258,11 +263,6 @@ def finance_loan(request):
     source_list = {}
     for finance in FinanceLoan.objects.filter(status=True):
         finance_details[finance.id] = finance
-        total_outstanding = 0
-        for data in FinanceUtilized.objects.filter(finance=finance).order_by('source_id', '-created').distinct('source_id'): 
-            total_outstanding += data.amount
-        finance.utilized_amount = total_outstanding
-        finance.save()
 
         total_emi[finance.id] = [((finance.utilized_amount / 100) * finance.roi) / 12, finance.utilized_amount,
                                  finance.loan_amount - finance.utilized_amount]
