@@ -45,7 +45,7 @@
                                         <strong class="text-warning">{{ total_emi|get_item:finance_id|get_item:2|number_value }}</strong>
                                     </div>
                                 </div>
-                                <table class="table table-bordered table-responsive-sm table-striped table-sm" style="white-space:nowrap"
+                                <table class="table table-bordered table-responsive-sm table-striped table-sm" style="white-space:nowrap">
                                     <thead>
                                         <tr>
                                             <th rowspan="2" class="text-center" style="width:100px">Date</th>
@@ -78,6 +78,12 @@
                                             {%endfor%}
                                         </tr>
                                         {%if forloop.counter == total_length %}
+                                            <tr>
+                                                <th class="text-center" style="width:100px"></th>
+                                                {%for source in source_list|get_item:finance_id %}
+                                                    <th colspan="2" class="text-center">{{ source }}</th>
+                                                {%endfor%}
+                                            </tr>
                                             <tr>
                                                 <th class="text-center">EMI</th>
                                                 {%for source in source_list|get_item:finance_id %}
