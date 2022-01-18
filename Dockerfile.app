@@ -31,8 +31,3 @@ RUN export LC_ALL=en_IN.utf8
 COPY . .
 
 RUN rm -rf ~/.cache/pip
-
-# enabling cronjob for db backup
-RUN echo "0 */1 * * * PGPASSWORD=pms pg_dump -h db -U pms pms > /home/db_backup/pms_db_backup.sql\n" >> /home/mycron
-RUN crontab /home/mycron
-RUN touch /var/log/cron.log
