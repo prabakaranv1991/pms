@@ -26,13 +26,11 @@ services:
       - ./database:/var/lib/postgresql/data/
       - ./db_backup:/home/db_backup/
     environment:
-      - SQL_ENGINE=django.db.backends.postgresql
       - POSTGRES_USER=pms
       - POSTGRES_PASSWORD=pms
       - POSTGRES_DB=pms
-      - SQL_PORT=5432
     ports:
-      - 7777:7777
+      - 5433:7777
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pms"]
       interval: 5s
