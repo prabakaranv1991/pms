@@ -7,7 +7,9 @@
 ## Starting cronjob
 >docker exec -it pms_web_1 service cron start
 ## Database Backup
->docker exec -it pms_db_1 pg_dump -U pms pms > db_backup/pms_db_backup.sql
+>docker exec -it pms_db_1 pg_dump -U pms pms -Fc -f /home/db_backup/pms.pgd
+## Database REstore
+>docker exec -it pms_db_1 pg_restore -j 8 -d pms /home/db_backup/pms.pgd
 ## Bash
 >docker exec -it pms_web_1 /bin/bash
 
