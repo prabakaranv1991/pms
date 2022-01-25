@@ -5,7 +5,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.app
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver  --insecure 0.0.0.0:8000
     depends_on:
       db:
         condition: service_healthy
