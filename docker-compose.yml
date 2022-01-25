@@ -30,7 +30,7 @@ services:
       - POSTGRES_PASSWORD=pms
       - POSTGRES_DB=pms
     ports:
-      - 7777:5432
+      - 7777:5433
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pms"]
       interval: 5s
