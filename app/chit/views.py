@@ -3,10 +3,11 @@ import json
 from crud import *
 from django.shortcuts import render
 from django.http import HttpResponse
+from dateutil.relativedelta import relativedelta
 from chit.models import Chit, Customers, ChitCustomers, ChitPayment, ChitSettlement
 from django.db.models import F
 import pandas as pd
-from datetime import date
+from datetime import date, datetime
 from chit.forms import *
 
 @login_required
@@ -46,9 +47,11 @@ def chit(request, chit_id=None):
             customer_list = {data.id:data for data in Customers.objects.exclude(id__in=customers.keys()).order_by('name')}
         chit_details[chit_detail.id] = {}
         month_counter = 1
+        betting_month = datetime.today()+ relativedelta(months=1)
+        current_month = betting_month if int(date.today().strftime("%d")) >= 25 else date.today()
         for month in pd.date_range(chit_detail.start_date, periods = chit_detail.total_months, freq = 'MS', name = "date"):
             data_tmp = {
-                'current_month': True if month.strftime("%Y%m") == date.today().strftime("%Y%m") else False,
+                'current_month': True if month.strftime("%Y%m") == current_month.strftime("%Y%m") else False,
                 'completed':  True if month.strftime("%Y%m") <= date.today().strftime("%Y%m") else False,
                 'preferred_to': ChitCustomers.objects.filter(chit=chit_detail, prefered_month=month_counter).values('customer', 'customer__name').first(),
                 'chit_amount': chit_detail.get_chit_amount(month_counter),
