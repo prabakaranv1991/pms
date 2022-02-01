@@ -35,5 +35,5 @@ class CardUpdate(UpdateView):
     title = 'Card'
 
 @csrf_exempt
-def git_hook(request):
+def git(request):
     return HttpResponse('ok')
