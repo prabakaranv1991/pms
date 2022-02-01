@@ -63,5 +63,5 @@ urlpatterns = [
     path('finance/', include(finance)),
     path('other/', include(other)),
     path('admin/', admin.site.urls),
-    url(r'^api/git/$', git_hook, name='git_hook'),
+    url(r'^api/git/$', git_hook, name='git'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
