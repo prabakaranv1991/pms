@@ -6,3 +6,4 @@ requests
 django-braces
 django-widget-tweaks
 Babel
+GitPython

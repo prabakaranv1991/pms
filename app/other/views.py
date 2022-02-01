@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from crud import *
 from other.models import *
 from other.forms import *
@@ -33,7 +31,3 @@ class CardUpdate(UpdateView):
     form_class = CardForm
     model = Card
     title = 'Card'
-
-@csrf_exempt
-def git(request):
-    return HttpResponse('ok')
