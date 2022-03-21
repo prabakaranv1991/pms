@@ -204,3 +204,32 @@ class Emi(TimeStampedModel):
 
     def get_absolute_url(self):
         return '/finance/emi/'
+
+class Loans(TimeStampedModel):
+    loan_type = [
+        ("personal", "Personal"),
+        ("jewel", "Jewel"),
+        ("car", "Car"),
+        ("od", "Over Draft"),
+        ("others", "Others"),
+    ]
+    bank = [
+        ("icici", "ICICI"),
+        ("bajaj", "Bajaj"),
+        ("sbi", "SBI"),
+        ("axis", "Axis"),
+        ("others", "Others"),
+    ]
+    name = models.CharField(max_length = 50)
+    type = models.CharField(max_length = 50, choices = loan_type)
+    bank = models.CharField(max_length = 50, choices = bank)
+    amount = models.DecimalField(max_digits = 15, decimal_places = 2)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    status = models.BooleanField(default = True)
+
+    class Meta:
+        db_table = "dim_loans"
+
+    def get_absolute_url(self):
+        return '/finance/loans/'
