@@ -2,3 +2,4 @@ database/*
 app/*/migrations/*
 static/*
 *.log
+.env*
