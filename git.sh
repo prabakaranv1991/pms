@@ -6,4 +6,4 @@ echo "Started Git Operations"
 git add .
 git commit -m "Database Backup Upload"
 git push origin master
-echo "Ended Git Operation"
+echo "Ended Git Operations"
