@@ -233,6 +233,8 @@ class Loans(TimeStampedModel):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.BooleanField(default = True)
+    priority = models.IntegerField(default = 999)
+    
     active = LoansManager()
     all_objects = models.Manager()
     finance = models.ForeignKey('FinanceLoan', on_delete = models.CASCADE, null=True, blank=True)
@@ -240,8 +242,8 @@ class Loans(TimeStampedModel):
     class Meta:
         db_table = "dim_loans"
 
-    @classmethod
-    def outstanding(cls):
+    @staticmethod
+    def outstanding():
         total_credit = 0
         try:
             for loans in Loans.active.all():

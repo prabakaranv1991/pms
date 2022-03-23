@@ -314,7 +314,7 @@ class LoansList(ListView):
     links = ["Total Outstanding: <b>" + number_value(Loans.outstanding()) + "</b>"]
 
     def get_ordering(self):
-        return '-total_amount'
+        return 'priority'
 
 
 class LoansCreate(CreateView):
