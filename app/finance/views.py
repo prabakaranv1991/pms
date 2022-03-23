@@ -266,7 +266,7 @@ def finance_loan(request):
     total_emi = {}
     finance_data = {}
     source_list = {}
-    for finance in FinanceLoan.objects.filter(status=True):
+    for finance in FinanceLoan.objects.filter(status=True).order_by('id'):
         finance_details[finance.id] = finance
 
         total_emi[finance.id] = [((finance.utilized_amount / 100) * finance.roi) / 12, finance.utilized_amount,
