@@ -240,8 +240,8 @@ class Loans(TimeStampedModel):
     class Meta:
         db_table = "dim_loans"
 
-    @staticmethod
-    def outstanding():
+    @classmethod
+    def outstanding(cls):
         total_credit = 0
         try:
             for loans in Loans.active.all():
