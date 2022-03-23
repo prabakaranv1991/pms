@@ -312,9 +312,9 @@ class LoansList(ListView):
     model = Loans
     title = 'Loans'
     links = ["Total Outstanding: <b>" + number_value(Loans.outstanding()) + "</b>"]
-    
+
     def get_ordering(self):
-        return 'id'
+        return '-total_amount'
 
 
 class LoansCreate(CreateView):
