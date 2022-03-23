@@ -37,7 +37,7 @@
                                 </div>
                                 {%else%}
                                 <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                    <b><span class="text-info">{{ name }}</span></b>
+                                    <b><u><span class="text-info">{{ name }}</span></u></b>
                                     <div>Loan Amount : 
                                         <span class="text-info">{{finance_details|get_item:finance_id|get_item:'loan_amount'|number_value }}</span>
                                     </div>
