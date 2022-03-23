@@ -38,10 +38,8 @@
                                 {%else%}
                                 <div class="col-sm-12 col-md mb-sm-2 mb-0">
                                     <b><u><span class="text-info">{{ name }}</span></u></b>
-                                    <div>Loan Amount : 
-                                        <span class="text-info">{{finance_details|get_item:finance_id|get_item:'loan_amount'|number_value }}</span>
-                                    </div>
-                                    <div>Utilized&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
+                                    <div>Loan Amount/Utilized : 
+                                        <span class="text-info">{{finance_details|get_item:finance_id|get_item:'loan_amount'|number_value }}</span> / 
                                         <span class="text-success">{{ total_emi|get_item:finance_id|get_item:1|number_value }}</span>
                                     </div>
                                 </div>
