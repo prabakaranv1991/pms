@@ -17,22 +17,36 @@
         <div class="fade-in">
             <div class="row">
                 {%for finance_id, finance in finance_loan.items %}
-                <div class="col-md-12">
+                {%with finance_details|get_item:finance_id|get_item:'name' as name%}
+                <div class="{%if name == 'Bajaj Finance' %}col-md-12{%else%}col-md-3{%endif%}">
                     <div class="card">
                         <div class="card-header">
                             <div class="row text-center">
+                                {%if name == 'Bajaj Finance' %}
                                 <div class="col-sm-12 col-md mb-sm-2 mb-0">
                                     <div class="text-muted">Name</div>
-                                    <strong class="text-info">{{ finance_details|get_item:finance_id|get_item:'name' }}</strong>
+                                    <strong class="text-info">{{ name }}</strong>
                                 </div>
                                 <div class="col-sm-12 col-md mb-sm-2 mb-0">
                                     <div class="text-muted">Loan Amount</div>
                                     <strong class="text-info">{{ finance_details|get_item:finance_id|get_item:'loan_amount'|number_value }}</strong>
                                 </div>
                                 <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                    <div class="text-muted">Utilized Amount</div>
+                                    <div class="text-muted">Utilized</div>
                                     <strong class="text-success">{{ total_emi|get_item:finance_id|get_item:1|number_value }}</strong>
                                 </div>
+                                {%else%}
+                                <div class="col-sm-12 col-md mb-sm-2 mb-0">
+                                    <b><span class="text-info">{{ name }}</span></b>
+                                    <div>Loan Amount : 
+                                        <span class="text-info">{{finance_details|get_item:finance_id|get_item:'loan_amount'|number_value }}</span>
+                                    </div>
+                                    <div>Utilized&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
+                                        <span class="text-success">{{ total_emi|get_item:finance_id|get_item:1|number_value }}</span>
+                                    </div>
+                                </div>
+                                {%endif%}
+                                {%if name == 'Bajaj Finance' %}
                                 <div class="col-sm-12 col-md mb-sm-2 mb-0">
                                     <div class="text-muted">Emi</div>
                                     <strong class="text-success">{{ total_emi|get_item:finance_id|get_item:0|number_value }}</strong>
@@ -41,23 +55,26 @@
                                     <div class="text-muted">Balance</div>
                                     <strong class="text-warning">{{ total_emi|get_item:finance_id|get_item:2|number_value }}</strong>
                                 </div>
+                                {%endif%}
                             </div>
                         </div>
                         <div class="card-body">
-                                <table class="table table-bordered table-responsive-sm table-striped table-sm" style="white-space:nowrap; display: block; max-height:250px; overflow: scroll;">
+                                <table class="table table-bordered table-responsive-sm table-striped table-sm" style="white-space:nowrap; display: block; max-height:250px; overflow: auto;">
                                     <thead>
                                         <tr>
-                                            <th rowspan="2" class="text-center" style="width:100px">Date</th>
+                                            <th {%if name == 'Bajaj Finance' %}rowspan="2"{%endif%} class="text-center" style="width:100px">Date</th>
                                             {%for source in source_list|get_item:finance_id %}
-                                                <th colspan="2" class="text-center">{{ source }}</th>
+                                                <th {%if name == 'Bajaj Finance' %}colspan="2"{%endif%} class="text-center">{{ source }}</th>
                                             {%endfor%}
                                         </tr>
+                                        {%if name == 'Bajaj Finance' %}
                                         <tr>
                                             {%for source in source_list|get_item:finance_id %}
                                                 <th class="text-center">Amount</th>
                                                 <th class="text-center">Emi</th>
                                             {%endfor%}
                                         </tr>
+                                        {%endif%}
                                     </thead>
                                     <tbody>
                                         {%with total_length=finance.items|length %}
@@ -73,20 +90,22 @@
                                                     {%endif%}<br>
                                                     {{ data|get_item:source.id|get_item:1|number_value }}
                                                 </td>
+                                                {%if name == 'Bajaj Finance' %}
                                                 <td class="text-right">{{ data|get_item:source.id|get_item:0|number_value }}</td>
+                                                {%endif%}
                                             {%endfor%}
                                         </tr>
-                                        {%if forloop.counter == total_length %}
+                                        {%if forloop.counter == total_length and name == 'Bajaj Finance' %}
                                             <tr>
                                                 <th class="text-center" style="width:100px"></th>
                                                 {%for source in source_list|get_item:finance_id %}
-                                                    <th colspan="2" class="text-center">{{ source }}</th>
+                                                    <th {%if name == 'Bajaj Finance' %}colspan="2"{%endif%} class="text-center">{{ source }}</th>
                                                 {%endfor%}
                                             </tr>
                                             <tr>
                                                 <th class="text-center">EMI</th>
                                                 {%for source in source_list|get_item:finance_id %}
-                                                    <th colspan="2" class="text-center">{{ data|get_item:source.id|get_item:0|number_value }}</th>
+                                                    <th {%if name == 'Bajaj Finance' %}colspan="2"{%endif%} class="text-center">{{ data|get_item:source.id|get_item:0|number_value }}</th>
                                                 {%endfor%}
                                             </tr>
                                         {%endif%}
@@ -99,9 +118,11 @@
                                             <td style="width:110px">
                                                 <input type="text" class="form-control text-right" name="paid[{{ finance_id }}_{{ source.id }}]" placeholder="Repayment" />
                                             </td>
+                                            {%if name == 'Bajaj Finance' %}
                                             <td style="width:110px">
                                                 <input type="text" class="form-control text-right" name="withdraw[{{ finance_id }}_{{ source.id }}]" placeholder="Withdraw" />
                                             </td>
+                                            {%endif%}
                                         {%endfor%}
                                     </tfoot>
                                 </table>
@@ -111,6 +132,7 @@
                         </div>
                     </div>
                 </div>
+                {%endwith%}
                 {%endfor%}
             </div>
         </div>
