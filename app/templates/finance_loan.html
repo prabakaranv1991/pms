@@ -87,7 +87,7 @@
                                                         (<span class=" text-{%if data|get_item:source.id|get_item:3 == 'repayment' %}danger{%else%}success{%endif%}">
                                                         <strong>{{ data|get_item:source.id|get_item:2|number_value }}</strong>
                                                         </span>)
-                                                    {%endif%}<br>
+                                                    {%endif%}{%if name == 'Bajaj Finance' %}<br>{%endif%}
                                                     {{ data|get_item:source.id|get_item:1|number_value }}
                                                 </td>
                                                 {%if name == 'Bajaj Finance' %}
