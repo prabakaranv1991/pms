@@ -45,6 +45,11 @@ finance = [
     path('emi/<str:pk>/update/', login_required(EmiUpdate.as_view()), name='emi_update'),
     path('loan/', finance_loan, name='finance_loan'),
 ]
+loans = [
+    path('', login_required(LoansList.as_view()), name="loans_list"),
+    path('create/', login_required(LoansCreate.as_view()), name="loans_create"),
+    path('<str:pk>/update/', login_required(LoansUpdate.as_view()), name='loans_update'),
+]
 
 other = [
     path('password/', login_required(PasswordList.as_view()), name='password'),
@@ -61,7 +66,9 @@ urlpatterns = [
     url('car/status/$', car_status, name="car_status"),
     path('chit/', include(chit)),
     path('finance/', include(finance)),
+    path('loans/', include(loans)),
     path('other/', include(other)),
     path('admin/', admin.site.urls),
     url(r'^api/git/$', git, name='git'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

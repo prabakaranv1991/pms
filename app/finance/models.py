@@ -205,6 +205,11 @@ class Emi(TimeStampedModel):
     def get_absolute_url(self):
         return '/finance/emi/'
 
+class LoansManager(models.Manager):
+
+    def get_queryset(self):
+        return super().get_queryset().filter(~Q(total_amount=F('paid_amount')))
+
 class Loans(TimeStampedModel):
     loan_type = [
         ("personal", "Personal"),
@@ -228,9 +233,22 @@ class Loans(TimeStampedModel):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.BooleanField(default = True)
+    active = LoansManager()
+    all_objects = models.Manager()
+    finance = models.ForeignKey('FinanceLoan', on_delete = models.CASCADE, null=True, blank=True)
 
     class Meta:
         db_table = "dim_loans"
 
+    @staticmethod
+    def outstanding():
+        total_credit = 0
+        try:
+            for loans in Loans.active.all():
+                total_credit = total_credit + (loans.total_amount - loans.paid_amount)
+        except Exception as e:
+            pass
+        return total_credit
+
     def get_absolute_url(self):
-        return '/finance/loans/'
+        return '/loans/'

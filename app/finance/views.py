@@ -213,7 +213,12 @@ def finance_loan(request):
                                                amount=float(utilized.amount) - float(amount),
                                                paid_amount=float(amount), paid_date=date.today(),
                                                payment_type='repayment')
-            except:
+                finance_source = FinanceSource.objects.get(id=id[1])
+                if str(finance_source).lower() == 'self':
+                    loan_data = Loans.active.get(finance_id=id[0])
+                    loan_data.paid_amount = float(loan_data.paid_amount) + float(amount)
+                    loan_data.save()
+            except Exception as e:
                 pass
         for id, amount in get_request_data(request, 'withdraw'):
             id = id.split("_")
@@ -302,3 +307,21 @@ class EmiUpdate(UpdateView):
     form_class = EmiForm
     model = Emi
     title = 'Emi'
+
+class LoansList(ListView):
+    model = Loans
+    title = 'Loans'
+
+    links = ["Total Outstanding: <b>" + number_value(Loans.outstanding()) + "</b>"]
+
+
+class LoansCreate(CreateView):
+    form_class = LoansForm
+    model = Loans
+    title = 'Loans'
+
+
+class LoansUpdate(UpdateView):
+    form_class = LoansForm
+    model = Loans
+    title = 'Loans'
