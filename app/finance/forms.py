@@ -40,3 +40,11 @@ class EmiForm(forms.ModelForm):
         model = Emi
         fields = '__all__'
         exclude = ('created', 'modified', )
+
+class LoansForm(forms.ModelForm):
+    required_css_class = 'required'
+
+    class Meta:
+        model = Loans
+        fields = '__all__'
+        exclude = ('created', 'modified', )

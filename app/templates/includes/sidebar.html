@@ -14,10 +14,13 @@
             <a class="c-sidebar-nav-link" href="/chit/">{{ 'bank'|menuicon|safe }} Chit</a>
         </li>
         <li class="c-sidebar-nav-item {%if request.path == '/finance/' %}c-active{%endif%}" title="Finance">
-            <a class="c-sidebar-nav-link" href="/finance/">{{ 'credit-card'|menuicon|safe }} Finance</a>
+            <a class="c-sidebar-nav-link" href="/finance/">{{ 'wallet'|menuicon|safe }} Finance</a>
+        </li>
+        <li class="c-sidebar-nav-item {%if request.path|startswith:'/loans/' %}c-active{%endif%}" title="Finance">
+            <a class="c-sidebar-nav-link" href="/loans/">{{ 'credit-card'|menuicon|safe }} Loans</a>
         </li>
         <li class="c-sidebar-nav-item {%if request.path == '/other/password' %}c-active{%endif%}" title="Password">
-            <a class="c-sidebar-nav-link" href="/other/password">{{ 'credit-card'|menuicon|safe }} Passwords</a>
+            <a class="c-sidebar-nav-link" href="/other/password">{{ 'lock-locked'|menuicon|safe }} Passwords</a>
         </li>
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" data-class="c-sidebar-minimized" data-target="_parent" type="button"></button>
