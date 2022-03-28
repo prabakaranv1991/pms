@@ -95,7 +95,7 @@ class Expenses(TimeStampedModel):
         if self.chit:
             if self.chit.is_started:
                 return self.chit.get_self_amount(self.chit.get_month_number(self.month[:-3].replace("-", "")))
-        if self.finance:
+        if self.finance and self.type != 'repayment':
             return self.finance.interest_amount
         return self._amount
 
