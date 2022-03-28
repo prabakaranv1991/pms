@@ -12,7 +12,7 @@ import pandas as pd
 
 @login_required
 def finance(request):
-    month_list = pd.date_range('2021-10-01', date.today() + relativedelta(months=+3), freq='MS', name="date")
+    month_list = pd.date_range('2021-10-01', date.today() + relativedelta(months=+6), freq='MS', name="date")
     month = request.GET.get('month', date.today().replace(day=1).strftime("%Y-%m-%d"))
     monthly_payment_data = {'income': [], 'expense': [], 'credit': [], 'expense_amount': {},
                             'income_total': 0, 'expense_total': 0,
