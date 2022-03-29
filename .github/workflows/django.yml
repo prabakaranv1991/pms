@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Install Dependencies
+    - name: Deploying Latest code
       run: |
         cd /home/praba_test
         docker-compose down
