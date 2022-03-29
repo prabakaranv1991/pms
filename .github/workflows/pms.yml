@@ -3,12 +3,13 @@ name: Docker Image CI
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  paths:
+    paths:
       - docker-compose.yml
       - .env.dev
 
+  pull_request:
+    branches: [ master ]
+  
 jobs:
 
   build:
