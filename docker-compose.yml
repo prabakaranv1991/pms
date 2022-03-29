@@ -12,7 +12,6 @@ services:
     volumes:
       - ./app:/usr/src/app/
       - ./host_to_container_pipe:/hostpipe
-      - ./ci.txt:/ci.txt
     ports:
       - 8888:8000
     env_file:

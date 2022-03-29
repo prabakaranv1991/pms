@@ -38,7 +38,5 @@ class CardUpdate(UpdateView):
 
 @csrf_exempt
 def git(request):
-    with open('/ci.txt') as file:
-        for line in file:
-            os.system('echo '+ str(line.rstrip()) + ' >> /hostpipe')
+    os.system('echo sh git.sh >> /hostpipe')
     return HttpResponse('ok')
