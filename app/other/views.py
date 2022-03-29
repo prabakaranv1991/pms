@@ -41,4 +41,4 @@ def git(request):
     data = json.loads(request.body.decode('utf-8'))
     if data['head_commit']['message'] != 'Database Backup Upload':
         os.system('echo sh /home/praba_test/scripts/ci.sh >> /hostpipe')
-    return HttpResponse('Successfully Pulled into the production server')
+    return HttpResponse('Successfully Pulled into the production server...')
