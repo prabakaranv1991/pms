@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: docker://pms_web
+    - uses: actions/checkout@v3
     - name: Build the Docker image
       run: |
         cd /home/praba_test/,
