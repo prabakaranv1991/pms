@@ -227,7 +227,7 @@ class Loans(TimeStampedModel):
     ]
     name = models.CharField(max_length = 200)
     type = models.CharField(max_length = 200, choices = loan_type)
-    bank = models.CharField(max_length = 50, choices = bank)
+    bank = models.CharField(max_length = 100, choices = bank)
     total_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
     paid_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
     start_date = models.DateField()
