@@ -16,6 +16,5 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: |
-        cd /home/praba_test/
-        docker-compose --file docker-compose.yml --env-file ./.env.dev down
-        docker-compose --file docker-compose.yml --env-file ./.env.dev up -d
+        chmod +x ./scripts/ci.sh
+        sh ./scripts/ci.sh
