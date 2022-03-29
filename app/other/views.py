@@ -35,10 +35,3 @@ class CardUpdate(UpdateView):
     form_class = CardForm
     model = Card
     title = 'Card'
-
-@csrf_exempt
-def git(request):
-    data = json.loads(request.body.decode('utf-8'))
-    if data['head_commit']['message'] != 'Database Backup Upload':
-        os.system('echo /home/praba_test/scripts/ci.sh >> /hostpipe &')
-    return HttpResponse('Successfully Pulled into the production server...')
