@@ -3,3 +3,4 @@ app/*/migrations/*
 static/*
 *.log
 .env*
+actions-runner/*
