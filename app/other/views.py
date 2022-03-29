@@ -1,4 +1,4 @@
-import os
+import os, json
 from django.http import HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -39,6 +39,6 @@ class CardUpdate(UpdateView):
 @csrf_exempt
 def git(request):
     data = json.loads(request.body.decode('utf-8'))
-    print(data['head_commit']['message'])
-    #os.system('echo sh git.sh >> /hostpipe')
+    if data['head_commit']['message'] != 'Database Backup Upload':
+        os.system('echo sh git.sh >> /hostpipe')
     return HttpResponse('ok')
