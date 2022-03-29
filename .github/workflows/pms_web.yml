@@ -18,8 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: docker://pms_web
+    - uses: actions/checkout@v3
     - name: Build the Docker image
       run: |
-        python3 manage.py makemigrations
-        python3 manage.py migrate
+        ls -lrth
+        ${GITHUB_WORKSPACE}/scripts/ci.sh
