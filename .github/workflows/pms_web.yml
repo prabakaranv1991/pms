@@ -21,5 +21,6 @@ jobs:
     - uses: docker://pms_web
     - name: Build the Docker image
       run: |
+        ls -lrth
         python3 manage.py makemigrations
         python3 manage.py migrate
