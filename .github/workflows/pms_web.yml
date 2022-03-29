@@ -8,7 +8,7 @@ jobs:
 
   build:
 
-    container: pms_web
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
