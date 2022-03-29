@@ -1,4 +1,4 @@
-#import git 
+import os
 from django.http import HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -38,6 +38,5 @@ class CardUpdate(UpdateView):
 
 @csrf_exempt
 def git(request):
-    #g = git.cmd.Git(settings.BASE_DIR)
-    #g.pull()
+    os.system('echo sh git.sh >> /hostpipe')
     return HttpResponse('ok')
