@@ -6,12 +6,11 @@ on:
     paths:
       - docker-compose.yml
       - .env.dev
-
+      - /home/praba_test/
 
   pull_request:
     branches: [ master ]
 
-  
 jobs:
 
   build:
@@ -23,5 +22,6 @@ jobs:
     - name: Build the Docker image
       run: |
         cd /home/praba_test/
+        ls -lrth
         docker-compose --file docker-compose.yml --env-file .env.dev down
         docker-compose --file docker-compose.yml --env-file .env.dev up -d
