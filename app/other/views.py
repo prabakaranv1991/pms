@@ -40,9 +40,5 @@ class CardUpdate(UpdateView):
 def git(request):
     data = json.loads(request.body.decode('utf-8'))
     if data['head_commit']['message'] != 'Database Backup Upload':
-        os.system('echo cd /home/praba_test >> /hostpipe')
-        os.system('echo git pull >> /hostpipe')
-        os.system('echo docker exec -it praba_test_web_1 python3 manage.py makemigrations >> /hostpipe')
-        os.system('echo docker exec -it praba_test_web_1 python3 manage.py migrate >> /hostpipe')
-
+        os.system('echo /home/praba_test/scripts/ci.sh >> /hostpipe &')
     return HttpResponse('Successfully Pulled into the production server...')
