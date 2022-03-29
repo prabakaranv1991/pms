@@ -32,5 +32,5 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          docker exec -i praba_test_web_1 python3 manage.py makemigrations,
-          docker exec -i praba_test_web_1 python3 manage.py migrate.
+          docker exec -i pms_web python3 manage.py makemigrations,
+          docker exec -i pms_web python3 manage.py migrate.
