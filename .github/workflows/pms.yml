@@ -7,6 +7,7 @@ on:
       - docker-compose.yml
       - .env.dev
 
+
   pull_request:
     branches: [ master ]
   
