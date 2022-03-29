@@ -38,5 +38,7 @@ class CardUpdate(UpdateView):
 
 @csrf_exempt
 def git(request):
-    os.system('echo sh git.sh >> /hostpipe')
+    data = json.loads(request.body.decode('utf-8'))
+    print(data['head_commit']['message'])
+    #os.system('echo sh git.sh >> /hostpipe')
     return HttpResponse('ok')
