@@ -11,9 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: docker://pms_web
-    - name: Build the Docker image
-      run: |
-        ls -lrth
-        python3 manage.py makemigrations
-        python3 manage.py migrate
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Build docker images
+        run: docker-compose build
