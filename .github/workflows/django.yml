@@ -12,7 +12,6 @@ jobs:
     steps:
     - name: Deploying Latest code
       run: |
-        cd /home/praba_test
         docker-compose down
         docker-compose up -d
         docker exec -i praba_test_web_1 python3 manage.py makemigrations
