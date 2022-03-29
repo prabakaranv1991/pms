@@ -1,4 +1,4 @@
-name: Django CI
+name: PMS CI
 
 on:
   push:
@@ -10,10 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Deploying Latest code
+    - name: Docker Setup
       run: |
         cd /home/praba_test
-        docker-compose down
-        docker-compose up -d
         docker exec -i praba_test_web_1 python3 manage.py makemigrations
         docker exec -i praba_test_web_1 python3 manage.py migrate
