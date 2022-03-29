@@ -5,6 +5,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.app
+    container_name: pms_web
     command: python3 manage.py runserver  --insecure 0.0.0.0:8000
     depends_on:
       db:
@@ -23,6 +24,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.db
+    container_name: pms_db
     volumes:
       - ./database:/var/lib/postgresql/data/
       - ./db_backup:/home/db_backup/
