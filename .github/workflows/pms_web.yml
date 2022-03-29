@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - docker-compose.yml
+      - .env.dev
+      - /home/praba_test/
+
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: docker://pms_web
+    - name: Build the Docker image
+      run: |
+        python3 manage.py makemigrations
+        python3 manage.py migrate
