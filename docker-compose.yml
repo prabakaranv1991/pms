@@ -16,7 +16,7 @@ services:
     ports:
       - 8888:8000
     env_file:
-      - ./.env.dev
+      - ./.env
     networks:
       - app-network
 
