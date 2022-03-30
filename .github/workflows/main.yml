@@ -10,12 +10,16 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    env:
+      working-directory: ./home/praba_test
     steps:
       - uses: actions/checkout@v3
+      - name: GIT Pull Latest Code
+        working-directory: ${{env.working-directory}}
+        run: git pull
       - name: Migration
+        working-directory: ${{env.working-directory}}
         run: |
-          cd /home/praba_test
-          git pull
           docker-compose --env-file .env down
           docker-compose --env-file .env up -d --build
           docker exec -i pms_web python3 manage.py makemigrations
