@@ -14,7 +14,7 @@ jobs:
       working-directory: /home/praba_test
     steps:
       - uses: actions/checkout@v3
-      - name: GIT Pull Latest Code
+      - name: GIT Pull
         working-directory: ${{env.working-directory}}
         run: git pull
       - name: Docker Setup
