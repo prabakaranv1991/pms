@@ -17,10 +17,13 @@ jobs:
       - name: GIT Pull Latest Code
         working-directory: ${{env.working-directory}}
         run: git pull
-      - name: Migration
+      - name: Docker Setup
         working-directory: ${{env.working-directory}}
         run: |
           docker-compose --env-file .env down
           docker-compose --env-file .env up -d --build
+      - name: Running Migration
+        working-directory: ${{env.working-directory}}
+        run: |
           docker exec -i pms_web python3 manage.py makemigrations
           docker exec -i pms_web python3 manage.py migrate
