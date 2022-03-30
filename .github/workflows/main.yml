@@ -16,8 +16,7 @@ jobs:
         run: |
           cd /home/praba_test
           git pull
-          docker exec -i pms_web pip install -r requirements.txt
+          docker-compose --env-file .env down
+          docker-compose --env-file .env up -d --build
           docker exec -i pms_web python3 manage.py makemigrations
           docker exec -i pms_web python3 manage.py migrate
-          docker-compose --env-file .env down
-          docker-compose --env-file .env up -d
