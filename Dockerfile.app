@@ -27,7 +27,4 @@ RUN pip3 install -r requirements.txt
 
 RUN export LC_ALL=en_IN.utf8
 
-# copy project
-COPY . .
-
 RUN rm -rf ~/.cache/pip
