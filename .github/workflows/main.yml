@@ -12,10 +12,10 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
+      - name: GIT Pull Latest Code
+        run: git pull
       - name: Migration
         run: |
-          cd /home/praba_test
-          git pull
           docker-compose --env-file .env down
           docker-compose --env-file .env up -d --build
           docker exec -i pms_web python3 manage.py makemigrations
