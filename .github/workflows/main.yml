@@ -11,13 +11,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Download the build folders
-        uses: actions/download-artifact@v2
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
         with:
-          name: build
-          path: .
-
+          build: npm run build
+          start: npm start
 
   build:
     runs-on: self-hosted
