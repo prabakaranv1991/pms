@@ -19,12 +19,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Download the build folders
-        uses: actions/download-artifact@v2
-        with:
-          name: report
-          path: report.html
-
       - name: 'UI Tests - Chrome'
         uses: cypress-io/github-action@v2
         with:
@@ -37,9 +31,7 @@ jobs:
           parallel: true
           group: 'UI - Chrome'
           spec: cypress/integration/*
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     runs-on: self-hosted
     needs: test
