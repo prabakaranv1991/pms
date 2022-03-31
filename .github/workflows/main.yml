@@ -8,23 +8,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Save build folder
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          if-no-files-found: error
-          path: build
-
-      - name: Cypress install
+      - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          runTests: false
-          build: yarn build
+          build: npm run build
+          start: npm start
 
   build:
     runs-on: self-hosted
