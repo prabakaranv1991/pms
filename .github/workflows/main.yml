@@ -6,21 +6,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  cypress-run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v1
         with:
-          persist-credentials: false
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - name: Running Testing
-        run: git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
-      - name: Running Testing
-        run: |
-            npm install -g npm
-            npm ci
+          build: npm run cy:run
+          wait-on: http://139.59.78.156:8888/
 
   build:
     runs-on: self-hosted
