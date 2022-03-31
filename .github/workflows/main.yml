@@ -6,10 +6,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  install:
+  test:
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.18.3-chrome87-ff82
-    needs: install
     strategy:
       fail-fast: false
       matrix:
@@ -43,6 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build:
     runs-on: self-hosted
+    needs: test
     env:
       working-directory: /home/praba_test
     steps:
