@@ -14,7 +14,8 @@ jobs:
       matrix:
         # run copies of the current job in parallel
         containers: [1, 2]
-      
+    env:
+      working-directory: /home/praba_test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
