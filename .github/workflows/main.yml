@@ -15,7 +15,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: npm run cy:run
+          build: npx cypress run
           wait-on: http://139.59.78.156:8888/
 
   build:
