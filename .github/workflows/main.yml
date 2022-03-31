@@ -17,7 +17,7 @@ jobs:
           node-version: 12.x
       - run: git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
       - run: |
-          npm install -g npm @latest
+          npm install -g npm
           npm ci
 
   build:
