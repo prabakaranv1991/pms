@@ -9,13 +9,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
+      - uses: actions/checkout@v2
         with:
-          build: npm run build
-          start: npm start
+          persist-credentials: false
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - run: git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
+      - run: npm ci
 
   build:
     runs-on: self-hosted
