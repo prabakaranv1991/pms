@@ -30,6 +30,7 @@ jobs:
         run: npm i cypress
       - name: 'UI Tests - Chrome'
         uses: cypress-io/github-action@v2
+        working-directory: ${{env.working-directory}}
         with:
           install: false
           start: yarn start:ci
@@ -39,7 +40,6 @@ jobs:
           record: true
           parallel: true
           group: 'UI - Chrome'
-          spec: cypress/integration/*
 
   build:
     runs-on: self-hosted
