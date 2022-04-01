@@ -8,8 +8,6 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-    networks:
-      - app-network
     env:
       working-directory: /home/praba_test
     steps:
