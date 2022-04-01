@@ -1,6 +1,6 @@
 describe('Login', () => {
     beforeEach(() => {
-        cy.login('admin', 'admin')
+        cy.login('admin', 'Praniya_143')
     })
     it('Valid Credential', () => {
         cy.url().then(url => {

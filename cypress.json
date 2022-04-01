@@ -4,5 +4,4 @@
       "login.spec.js",
       "finance.spec.js"
     ],
-    "chromeWebSecurity": false
   }
