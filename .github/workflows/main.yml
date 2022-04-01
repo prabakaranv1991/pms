@@ -8,15 +8,15 @@ on:
 jobs:
   test:
     runs-on: ubuntu-18.04
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-        - name: Cypress tests
-          uses: ./
-          with:
-            working-directory: .
-            build: npx cypress info
+      - name: Cypress tests
+        uses: ./
+        with:
+          working-directory: .
+          build: npx cypress info
   build:
     runs-on: self-hosted
     needs: test
