@@ -14,7 +14,7 @@ jobs:
       - name: Install Cypress
         run: npm i cypress
         env:
-          NO_PROXY:localhost,pms_web
+          NO_PROXY: localhost,pms_web
       - name: Cypress run
         uses: cypress-io/github-action@v2
   build:
