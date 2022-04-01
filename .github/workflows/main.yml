@@ -6,24 +6,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        node: [12, 14, 16]
-    name: Test on Node v${{ matrix.node }}
+  runs-on: ubuntu-18.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Node
-        uses: actions/setup-node@v2
+
+      - name: Cypress tests
+        uses: ./
         with:
-          node-version: ${{ matrix.node }}
-      - uses: bahmutov/npm-install@v1
-      - run: npm run format
-      - run: npm run build
-      - run: npm test
-      - run: npm run check:markdown
+          working-directory: .
+          build: npx cypress info
   build:
     runs-on: self-hosted
     needs: test
