@@ -7,16 +7,15 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install Cypress
-        run: npm i cypress
-        env:
-          NO_PROXY:  http://pms_web
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
+
+      - name: Cypress tests
+        uses: ./
+        with:
+          build: npx cypress info
   build:
     runs-on: self-hosted
     needs: test
