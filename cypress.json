@@ -1,5 +1,5 @@
 {
-    "baseUrl": "http://0.0.0.0:8888/",
+    "baseUrl": "http://139.59.78.156:8888/",
     "testFiles": [
       "login.spec.js",
       "finance.spec.js"
