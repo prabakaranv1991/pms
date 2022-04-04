@@ -6,6 +6,17 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+          wait-on: "http://localhost:8888"
+          browser: chrome
+          headless: true
+    
   build:
     runs-on: self-hosted
     env:
