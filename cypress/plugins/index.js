@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: '../../../.env' })
 
 module.exports = (on, config) => {
   // copy any needed variables from process.env to config.env
