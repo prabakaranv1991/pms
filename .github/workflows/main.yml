@@ -9,12 +9,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: cypress/included:8.7.0
-    env:
-      working-directory: /home/praba_test
     steps:
       - uses: actions/checkout@v2
-        with:
-          path: ./.env
       - name: Install dependencies
         run: npm install dotenv
       - uses: cypress-io/github-action@v2
