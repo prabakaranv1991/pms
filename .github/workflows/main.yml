@@ -6,8 +6,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: cypress/included:8.7.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install dotenv
+      - uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+    
   build:
     runs-on: self-hosted
+    needs: test
     env:
       working-directory: /home/praba_test
     steps:
@@ -25,18 +37,3 @@ jobs:
         run: |
           docker exec -i pms_web python3 manage.py makemigrations
           docker exec -i pms_web python3 manage.py migrate
-
-  test:
-    runs-on: ubuntu-latest
-    container: cypress/included:8.7.0
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm install dotenv
-      - uses: cypress-io/github-action@v2
-        with:
-          start: npm start
-    
-  
-
