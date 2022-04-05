@@ -1,7 +1,6 @@
 {
-    "env": ".env",
     "testFiles": [
       "login.spec.js",
       "finance.spec.js"
     ]
-  }
+}
