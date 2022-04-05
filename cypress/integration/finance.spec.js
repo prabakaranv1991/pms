@@ -3,6 +3,6 @@ describe('Finance', () => {
         cy.login(Cypress.env('USERNAME'), Cypress.env('PASSWORD'))
     })
     it('Change Month', () => {
-        cy.visit(Cypress.config('baseUrl') + 'finance')
+        cy.visit('finance')
     })
 })
