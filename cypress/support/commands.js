@@ -1,5 +1,5 @@
 Cypress.Commands.add('login', (username, password) => {
-    cy.visit(Cypress.config('baseUrl') + 'login')
+    cy.visit(Cypress.env('BASEURL') + 'login')
     cy.get('input[name=username]').clear().type('admin')
     cy.get('input[name=password]').clear().type('Praniya143')
     cy.get('button[type=submit]').click()
