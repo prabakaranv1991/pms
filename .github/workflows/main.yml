@@ -32,10 +32,11 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install dotenv
       - uses: cypress-io/github-action@v2
-        run: |
-          npm install dotenv
-          serve -p 5000
+        with:
+          start: npm start
     
   
 
