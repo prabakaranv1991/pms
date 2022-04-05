@@ -11,4 +11,4 @@ Cypress.Commands.add('login', (username, password) => {
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
     url = Cypress.env('BASEURL') + url
     return originalFn(url, options)
-  })
+})
