@@ -16,6 +16,7 @@ jobs:
         working-directory: ${{env.working-directory}}
         run: git pull
       - name: Docker Setup
+        if: "contains(github.event.head_commit.message, 'restart')"
         working-directory: ${{env.working-directory}}
         run: |
           docker-compose --env-file .env down
