@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = (on, config) => {
   // copy any needed variables from process.env to config.env
-  const testFolder = '../';
+  const testFolder = '../../';
   const fs = require('fs');
 
   fs.readdirSync(testFolder).forEach(file => {
