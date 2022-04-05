@@ -33,8 +33,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: cypress-io/github-action@v2
-        with:
-          start: npm start
+        run: |
+          npm install dotenv
+          serve -p 5000
     
   
 
