@@ -11,10 +11,10 @@ describe('Finance', () => {
             var current = new Date(now.getFullYear(), now.getMonth() + 1, 1);
         }
         var next_month = current.toLocaleString('default', { month: 'long' }) + "' " + now.getFullYear().toString().substr(-2)
-        console.log(next_month)
+        console.log(current)
         cy.get('[name="month"]').select(next_month)
         cy.url().then(url => {
-            cy.url().should('include', '?month=' + String(next_month.getFullYear()) + '-' + String(d.getMonth()) + '-01' )
+            cy.url().should('include', '?month=' + String(current.getFullYear()) + '-' + String(current.getMonth()) + '-01' )
         })
     })
 })
