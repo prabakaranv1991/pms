@@ -15,8 +15,6 @@ jobs:
         with:
           start: npm start
           wait-on: "http://pms_web"
-    networks:
-      - app-network
     
   build:
     runs-on: self-hosted
