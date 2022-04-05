@@ -4,6 +4,5 @@ describe('Finance', () => {
     })
     it('Change Month', () => {
         cy.visit(Cypress.config('baseUrl') + 'finance')
-        print(date)
     })
 })
