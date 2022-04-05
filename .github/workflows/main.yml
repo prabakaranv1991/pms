@@ -14,7 +14,7 @@ jobs:
       - uses: cypress-io/github-action@v2
         with:
           start: npm start
-          wait-on: "http://localhost:8888"
+          wait-on: "http://pms_web:8888"
     
   build:
     runs-on: self-hosted
