@@ -1,6 +1,6 @@
 describe('Login', () => {
     beforeEach(() => {
-        cy.login('admin', 'Praniya_143')
+        cy.login(Cypress.env('USERNAME'), Cypress.env('PASSWORD'))
     })
     it('Valid Credential', () => {
         cy.url().then(url => {
