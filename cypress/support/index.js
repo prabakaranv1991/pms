@@ -15,3 +15,11 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+module.exports = (on, config) => {
+  // copy any needed variables from process.env to config.env
+  console.log(process.env.USER_NAME)
+
+  // do not forget to return the changed config object!
+  return config
+}

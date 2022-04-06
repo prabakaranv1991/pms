@@ -29,8 +29,8 @@ jobs:
   UNIT_TEST:
     runs-on: ubuntu-latest
     env:
-      USERNAME: ${{ secrets.USERNAME }}
-      PASSWORD: ${{ secrets.PASSWORD }}
+      USERNAME_NEW: ${{ secrets.USERNAME }}
+      PASSWORD_NEW: ${{ secrets.PASSWORD }}
     strategy:
       matrix:
         node: [10, 12, 14]
