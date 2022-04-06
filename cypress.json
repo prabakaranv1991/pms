@@ -5,7 +5,7 @@
     ],
     "env": {
       "BASEURL" : "http://139.59.78.156:8888/",
-      "USERNAME": "admin",
-      "PASSWORD": "Praniya143"
+      "USERNAME_": "admin",
+      "PASSWORD_": "Praniya143"
     }
 }
