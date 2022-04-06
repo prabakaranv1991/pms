@@ -28,6 +28,9 @@ jobs:
           docker exec -i pms_web python3 manage.py migrate
   UNIT_TEST:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [10, 12, 14]
     container: cypress/included:8.7.0
     needs: BUILD
     steps:
