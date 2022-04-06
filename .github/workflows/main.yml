@@ -28,6 +28,9 @@ jobs:
           docker exec -i pms_web python3 manage.py migrate
   UNIT_TEST:
     runs-on: ubuntu-latest
+    env:
+      USERNAME_NEW: ${{ secrets.USERNAME }}
+      PASSWORD_NEW: ${{ secrets.PASSWORD }}
     strategy:
       matrix:
         node: [10, 12, 14]
@@ -38,7 +41,4 @@ jobs:
       - uses: cypress-io/github-action@v2
         with:
           start: npm start
-        env:
-          USERNAME_NEW: ${{ secrets.USERNAME }}
-          PASSWORD_NEW: ${{ secrets.PASSWORD }}
 
