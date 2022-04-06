@@ -28,9 +28,7 @@ jobs:
           docker exec -i pms_web python3 manage.py migrate
   UNIT_TEST:
     runs-on: ubuntu-latest
-    env:
-      USERNAME_NEW: ${{ secrets.USERNAME }}
-      PASSWORD_NEW: ${{ secrets.PASSWORD }}
+    environment: PMS_PRODUCTION
     strategy:
       matrix:
         node: [10, 12, 14]
