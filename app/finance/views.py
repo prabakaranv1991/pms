@@ -258,9 +258,12 @@ def finance_loan(request):
                 total_outstanding += data.amount
             finance.utilized_amount = total_outstanding
             finance.save()
-            expense = Expenses.objects.get(finance=finance)
-            expense.amount = ((finance.utilized_amount / 100) * finance.roi) / 12
-            expense.save()            
+            try:
+                expense = Expenses.objects.get(finance=finance)
+                expense.amount = ((finance.utilized_amount / 100) * finance.roi) / 12
+                expense.save()            
+            except:
+                pass
 
     finance_details = {}
     total_emi = {}

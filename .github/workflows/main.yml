@@ -28,17 +28,17 @@ jobs:
           docker exec -i pms_web python3 manage.py migrate
   UNIT_TEST:
     runs-on: ubuntu-latest
+    env:
+      USERNAME_NEW: ${{ secrets.USERNAME }}
+      PASSWORD_NEW: ${{ secrets.PASSWORD }}
     strategy:
       matrix:
-        node: [10, 12, 14]
+        node: [1, 2]
     container: cypress/included:8.7.0
     needs: BUILD
     steps:
       - uses: actions/checkout@v2
       - uses: cypress-io/github-action@v2
         with:
-          start: npm start --env USERNAME_NEW="${{ secrets.USERNAME }}" 
-          env: |
-            USERNAME_NEW: ${{ secrets.USERNAME }}
-            PASSWORD_NEW: ${{ secrets.PASSWORD }}
+          start: npm start
 
