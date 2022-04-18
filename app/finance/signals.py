@@ -8,6 +8,6 @@ from datetime import date
 def update_monthly_payment(sender, instance, **kwargs):
         filter = {'month__year__gte': date.today().year, 'month__month__gte': date.today().month, 'paid_amount': 0}
         filter['income' if sender == Income else 'expense' ] = instance
-        if instance.pay_type == 'RE-Payment':
+        if instance.pay_type == 3:
                 return False
         MonthlyPayment.objects.filter(**filter).update(amount=instance.amount)
