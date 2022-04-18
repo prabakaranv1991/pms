@@ -16,12 +16,12 @@
             </td>
             <td class="d-none d-lg-table-cell">{{ expense.type }}</td>
             <td class="text-right">
-                {%if expense.pay_type == 'Changeable'  or expense.pay_type == 'Repayment' %}
+                {%if expense.pay_type == 'Changeable'  or expense.pay_type == 'RE-Payment' %}
                     <input type="text" name="expense[{{ expense.id }}]" value="{{ expense.amount }}" class="form-control text-right amount_edit" style="padding-right: 0px; padding-top:0px; display:none">
                 {%else%}
                     <input type="hidden" name="expense[{{ expense.id }}]" value="{{ expense.amount }}">
                 {%endif%}
-                <span class="{%if expense.pay_type == 'Changeable' or expense.pay_type == 'Repayment' %}amount_text{%endif%}">{{ expense.amount|number_value }}</span>
+                <span class="{%if expense.pay_type == 'Changeable' or expense.pay_type == 'RE-Payment' %}amount_text{%endif%}">{{ expense.amount|number_value }}</span>
             </td>
             {%if 'paid_amount' in expense %}
             <td class="text-center text-right paid" data-amount="{{ expense.amount }}" style="cursor:pointer">

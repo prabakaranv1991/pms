@@ -73,7 +73,7 @@ class Expenses(TimeStampedModel):
     _amount = models.DecimalField(max_digits = 15, decimal_places = 2, db_column = 'amount')
     start_date = models.DateField()
     end_date = models.DateField(null = True, blank = True)
-    pay_type = models.IntegerField(choices = [(1, "Fixed"), (2, "Changeable"), (3, "EMI")])
+    pay_type = models.IntegerField(choices = [(1, "Fixed"), (2, "Changeable"), (3, "RE-Payment")])
     status = models.BooleanField(default = True)
     sort_order = models.IntegerField(default = 999)
     savings = models.BooleanField(default = False)
