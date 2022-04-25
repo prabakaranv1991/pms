@@ -2,11 +2,13 @@ name: PMS_CI
 on:
   push:
     branches: [ master ]
-    
+    paths-ignore:
+      - 'db_backup/**'
   workflow_dispatch:
 
 jobs:   
   BUILD:
+    if: github.event.head_commit.message != "Database Backup Upload"
     runs-on: self-hosted
     env:
       working-directory: /home/praba_test
@@ -27,6 +29,7 @@ jobs:
           docker exec -i pms_web python3 manage.py makemigrations
           docker exec -i pms_web python3 manage.py migrate
   UNIT_TEST:
+    if: github.event.head_commit.message != "Database Backup Upload"
     runs-on: ubuntu-latest
     env:
       USERNAME_NEW: ${{ secrets.USERNAME }}
