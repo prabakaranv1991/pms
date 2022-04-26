@@ -29,9 +29,11 @@ class Card(TimeStampedModel):
 
 class Call(TimeStampedModel):
     number = models.CharField(max_length=50)
-    short_description = models.CharField(max_length=100)
+    person_name = models.CharField(max_length=50)
     bank = models.CharField(max_length=100, choices=[('icici', 'ICICI'), ('hdfc', 'HDFC'), ('sbi', 'SBI'), ('kvb', "KVB"), ('indian_bank', 'INDIAN BANK'), ('other', 'OTHERS'), ('bajaj', 'BAJAJ')])
-    description = models.TextField(null=True, blank=True)
+    short_description = models.CharField(max_length=100)
+    response = models.CharField(max_length=50)
+    description = models.TextField(null=True, blank=True)    
 
     class Meta:
         db_table = 'dim_call'
