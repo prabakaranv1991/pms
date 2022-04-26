@@ -22,6 +22,9 @@
         <li class="c-sidebar-nav-item {%if request.path == '/other/password' %}c-active{%endif%}" title="Password">
             <a class="c-sidebar-nav-link" href="/other/password">{{ 'lock-locked'|menuicon|safe }} Passwords</a>
         </li>
+        <li class="c-sidebar-nav-item {%if request.path == '/other/call' %}c-active{%endif%}" title="Calls">
+            <a class="c-sidebar-nav-link" href="/other/call/create">{{ 'phone'|menuicon|safe }} Call</a>
+        </li>
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" data-class="c-sidebar-minimized" data-target="_parent" type="button"></button>
 </div>

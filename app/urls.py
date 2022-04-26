@@ -58,6 +58,9 @@ other = [
     path('card/', login_required(CardList.as_view()), name='card'),
     path('card/create/', login_required(CardCreate.as_view()), name='card_create'),
     path('card/<str:pk>/update/', login_required(CardUpdate.as_view()), name='card_update'),
+    path('call/', login_required(CallList.as_view()), name='call'),
+    path('call/create/', login_required(CallCreate.as_view()), name='call_create'),
+    path('call/<str:pk>/update/', login_required(CallUpdate.as_view()), name='call_update'),
 ]
 
 urlpatterns = [

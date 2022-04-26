@@ -17,3 +17,11 @@ class CardForm(forms.ModelForm):
         model = Card
         fields = '__all__'
         exclude = ('created', 'modified', )
+
+class CallForm(forms.ModelForm):
+    required_css_class = 'required'
+
+    class Meta:
+        model = Call
+        fields = '__all__'
+        exclude = ('created', 'modified', )

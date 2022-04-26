@@ -35,3 +35,18 @@ class CardUpdate(UpdateView):
     form_class = CardForm
     model = Card
     title = 'Card'
+
+class CallList(ListView):
+    model = Call
+    title = 'Call'
+    name_field = 'number'
+
+class CallCreate(CreateView):
+    form_class = CallForm
+    model = Call
+    title = 'Call'
+
+class CallUpdate(UpdateView):
+    form_class = CallForm
+    model = Call
+    title = 'Call'

@@ -1,3 +1,4 @@
+from doctest import debug_script
 from django.db import models
 from abstract_models import TimeStampedModel
 
@@ -25,4 +26,16 @@ class Card(TimeStampedModel):
 
     def get_absolute_url(self):
         return '/other/card/'
+
+class Call(TimeStampedModel):
+    number = models.CharField(max_length=50)
+    short_description = models.CharField(max_length=100)
+    bank = models.CharField(max_length=100, choices=[('icici', 'ICICI'), ('hdfc', 'HDFC'), ('sbi', 'SBI'), ('kvb', "KVB"), ('indian_bank', 'INDIAN BANK'), ('other', 'OTHERS')])
+    description = models.TextField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'dim_call'
+    
+    def get_absolute_url(self):
+        return '/other/call/'
 
