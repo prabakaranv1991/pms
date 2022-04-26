@@ -30,7 +30,7 @@ class Card(TimeStampedModel):
 class Call(TimeStampedModel):
     number = models.CharField(max_length=50)
     short_description = models.CharField(max_length=100)
-    bank = models.CharField(max_length=100, choices=[('icici', 'ICICI'), ('hdfc', 'HDFC'), ('sbi', 'SBI'), ('kvb', "KVB"), ('indian_bank', 'INDIAN BANK'), ('other', 'OTHERS')])
+    bank = models.CharField(max_length=100, choices=[('icici', 'ICICI'), ('hdfc', 'HDFC'), ('sbi', 'SBI'), ('kvb', "KVB"), ('indian_bank', 'INDIAN BANK'), ('other', 'OTHERS'), ('bajaj', 'BAJAJ')])
     description = models.TextField(null=True, blank=True)
 
     class Meta:
