@@ -9,6 +9,11 @@ from dateutil.relativedelta import relativedelta
 from utils import *
 import pandas as pd
 
+class classproperty(object):
+    def __init__(self, fget):
+        self.fget = fget
+    def __get__(self, owner_self, owner_cls):
+        return self.fget(owner_cls)
 
 @login_required
 def finance(request):
@@ -323,10 +328,20 @@ class EmiUpdate(UpdateView):
 class LoansList(ListView):
     model = FinanceLoan
     title = 'Loans'
-    links = ["Total Outstanding: <b>" + number_value(FinanceLoan.outstanding()) + "</b>"]
 
     def get_ordering(self):
         return 'priority'
+
+    @classproperty
+    def links(self):
+        total_credit = 0
+        try:
+            for loans in FinanceLoan.active.all():
+                total_credit = total_credit + (loans.self_utilized_amount)
+        except Exception as e:            
+            pass
+        return ["Total Outstanding: <b>" + number_value(total_credit) + "</b>"]
+
 
 
 class LoansCreate(CreateView):

@@ -203,15 +203,6 @@ class FinanceLoan(TimeStampedModel):
     def interest_amount(self):
         return self.emi_amount if self.emi else ((self.utilized_amount/100)*self.roi)/12
 
-    @staticmethod
-    def outstanding():
-        total_credit = 0
-        try:
-            for loans in FinanceLoan.active.all():
-                total_credit = total_credit + (loans.self_utilized_amount)
-        except Exception as e:
-            pass
-        return total_credit
 
 class FinanceUtilized(TimeStampedModel):
     finance = models.ForeignKey('FinanceLoan', on_delete = models.CASCADE)
