@@ -45,6 +45,6 @@ class LoansForm(forms.ModelForm):
     required_css_class = 'required'
 
     class Meta:
-        model = Loans
+        model = FinanceLoan
         fields = '__all__'
         exclude = ('created', 'modified', )

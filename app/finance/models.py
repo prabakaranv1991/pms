@@ -151,22 +151,67 @@ class Credit(TimeStampedModel):
         credit = Credit.active.aggregate(total_amount = Sum('amount'))
         return 0 if credit['total_amount'] is None else credit['total_amount']
 
+class FinanceLoansManager(models.Manager):
+
+    def get_queryset(self):
+        return super().get_queryset().filter(~Q(loan_amount=F('paid_amount')))
+
 class FinanceLoan(TimeStampedModel):
+    loan_type = [
+        ("personal", "Personal"),
+        ("jewel", "Jewel"),
+        ("car", "Car"),
+        ("od", "Over Draft"),
+        ("others", "Others"),
+    ]
+    bank = [
+        ("icici", "ICICI"),
+        ("bajaj", "Bajaj"),
+        ("sbi", "SBI"),
+        ("axis", "Axis"),
+        ("others", "Others"),
+    ]
     name = models.CharField(max_length = 50)
+    type = models.CharField(max_length = 50, choices = loan_type)
+    bank = models.CharField(max_length = 50, choices = bank)
     loan_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
     utilized_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
+    self_utilized_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
+    paid_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
     roi = models.DecimalField(max_digits = 15, decimal_places = 2)
+    emi = models.BooleanField(default=False)
+    emi_amount = models.DecimalField(max_digits=50, decimal_places = 2, null=True, blank=True)
+    loan_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    priority = models.IntegerField(default = 999)
     status = models.BooleanField(default = True)
+    
+    active = FinanceLoansManager()
+    all_objects = models.Manager()
 
     class Meta:
         db_table = "dim_finance_loan"
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return '/loans/'
 
     @property
     def interest_amount(self):
-        return ((self.utilized_amount/100)*self.roi)/12
+        return self.emi_amount if self.emi else ((self.utilized_amount/100)*self.roi)/12
+
+    @staticmethod
+    def outstanding():
+        total_credit = 0
+        try:
+            for loans in FinanceLoan.active.all():
+                total_credit = total_credit + (loans.self_utilized_amount)
+        except Exception as e:
+            pass
+        return total_credit
 
 class FinanceUtilized(TimeStampedModel):
     finance = models.ForeignKey('FinanceLoan', on_delete = models.CASCADE)
@@ -208,7 +253,7 @@ class Emi(TimeStampedModel):
 class LoansManager(models.Manager):
 
     def get_queryset(self):
-        return super().get_queryset().filter(~Q(total_amount=F('paid_amount')))
+        return super().get_queryset().filter(~Q(loan_amount=F('paid_amount')))
 
 class Loans(TimeStampedModel):
     loan_type = [
@@ -227,27 +272,38 @@ class Loans(TimeStampedModel):
     ]
     name = models.CharField(max_length = 50)
     type = models.CharField(max_length = 50, choices = loan_type)
+    emi = models.BooleanField(default=False)
+    emi_amount = models.DecimalField(max_digits=50, decimal_places = 2, null=True, blank=True)
     bank = models.CharField(max_length = 50, choices = bank)
-    total_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
+    loan_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
+    utilized_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
     paid_amount = models.DecimalField(max_digits = 15, decimal_places = 2)
+    roi = models.DecimalField(max_digits = 15, decimal_places = 2)
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.BooleanField(default = True)
     priority = models.IntegerField(default = 999)
+    status = models.BooleanField(default = True)
     
     active = LoansManager()
     all_objects = models.Manager()
-    finance = models.ForeignKey('FinanceLoan', on_delete = models.CASCADE, null=True, blank=True)
 
     class Meta:
         db_table = "dim_loans"
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def interest_amount(self):
+        return ((self.utilized_amount/100)*self.roi)/12
 
     @staticmethod
     def outstanding():
         total_credit = 0
         try:
             for loans in Loans.active.all():
-                total_credit = total_credit + (loans.total_amount - loans.paid_amount)
+                total_credit = total_credit + (loans.loan_amount - loans.paid_amount)
         except Exception as e:
             pass
         return total_credit

@@ -160,7 +160,7 @@ class FinanceSourceUpdate(UpdateView):
 class ExpenseList(ListView):
     model = Expenses
     title = 'Expenses'
-    name_field = 'sort_order'
+    name_field = ['pay_type' ,'name']
 
 
 class ExpenseCreate(CreateView):
@@ -207,18 +207,20 @@ def finance_loan(request):
         for id, amount in get_request_data(request, 'paid'):
             id = id.split("_")
             try:
-                utilized = FinanceUtilized.objects.filter(finance_id=id[0], source_id=id[1]).order_by(
-                    '-created').first()
+                utilized = FinanceUtilized.objects.filter(finance_id=id[0], source_id=id[1]).order_by('-created').first()
+                outstanding_amount = float(utilized.amount) - float(amount)
                 FinanceUtilized.objects.create(finance_id=id[0], source_id=id[1],
-                                               amount=float(utilized.amount) - float(amount),
+                                               amount=outstanding_amount,
                                                paid_amount=float(amount), paid_date=date.today(),
                                                payment_type='repayment')
                 finance_source = FinanceSource.objects.get(id=id[1])
                 if str(finance_source).lower() == 'self':
-                    loan_data = Loans.active.get(finance_id=id[0])
+                    loan_data = FinanceLoan.active.get(id=id[0])
+                    loan_data.self_utilized_amount = outstanding_amount
                     loan_data.paid_amount = float(loan_data.paid_amount) + float(amount)
                     loan_data.save()
             except Exception as e:
+                print(amount)
                 pass
         for id, amount in get_request_data(request, 'withdraw'):
             id = id.split("_")
@@ -231,7 +233,13 @@ def finance_loan(request):
                                                payment_type='withdraw')
             except:
                 pass
-        for finance in FinanceLoan.objects.all():
+        self_finance_source = FinanceSource.objects.get(name='Self')
+        for finance in FinanceLoan.active.all():
+            if finance.self_utilized_amount == 0:
+                utilized = FinanceUtilized.objects.filter(finance=finance, source=self_finance_source).order_by('-created').first()
+                finance.self_utilized_amount = utilized.amount
+                finance.paid_amount = float(finance.paid_amount) + float(0 if utilized.paid_amount is None else utilized.paid_amount)
+                finance.save()
             source_list, data_tmp = FinanceUtilized.utilized(finance)
             pre_data = {}
             finance_data = {}
@@ -259,17 +267,18 @@ def finance_loan(request):
             finance.utilized_amount = total_outstanding
             finance.save()
             try:
-                expense = Expenses.objects.get(finance=finance)
+                expense = Expenses.objects.get(~Q(pay_type=3), finance=finance)
                 expense.amount = ((finance.utilized_amount / 100) * finance.roi) / 12
                 expense.save()            
-            except:
+            except Exception as e:
+                print(e)
                 pass
 
     finance_details = {}
     total_emi = {}
     finance_data = {}
     source_list = {}
-    for finance in FinanceLoan.objects.filter(status=True).order_by('id'):
+    for finance in FinanceLoan.active.filter(status=True).order_by('id'):
         finance_details[finance.id] = finance
 
         total_emi[finance.id] = [((finance.utilized_amount / 100) * finance.roi) / 12, finance.utilized_amount,
@@ -312,9 +321,9 @@ class EmiUpdate(UpdateView):
     title = 'Emi'
 
 class LoansList(ListView):
-    model = Loans
+    model = FinanceLoan
     title = 'Loans'
-    links = ["Total Outstanding: <b>" + number_value(Loans.outstanding()) + "</b>"]
+    links = ["Total Outstanding: <b>" + number_value(FinanceLoan.outstanding()) + "</b>"]
 
     def get_ordering(self):
         return 'priority'
@@ -322,11 +331,11 @@ class LoansList(ListView):
 
 class LoansCreate(CreateView):
     form_class = LoansForm
-    model = Loans
+    model = FinanceLoan
     title = 'Loans'
 
 
 class LoansUpdate(UpdateView):
     form_class = LoansForm
-    model = Loans
+    model = FinanceLoan
     title = 'Loans'
