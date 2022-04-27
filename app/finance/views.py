@@ -213,11 +213,14 @@ def finance_loan(request):
             id = id.split("_")
             try:
                 utilized = FinanceUtilized.objects.filter(finance_id=id[0], source_id=id[1]).order_by('-created').first()
-                outstanding_amount = float(utilized.amount) - float(amount)
-                FinanceUtilized.objects.create(finance_id=id[0], source_id=id[1],
-                                               amount=outstanding_amount,
-                                               paid_amount=float(amount), paid_date=date.today(),
-                                               payment_type='repayment')
+                if str(utilized.paid_date) == date.today().strftime('%Y-%m-%d'):
+                    FinanceUtilized.objects.filter(id=utilized.id).update(amount=float(utilized.amount) - float(amount), paid_amount= float(utilized.paid_amount) + float(amount))
+                else:
+                    outstanding_amount = float(utilized.amount) - float(amount)
+                    FinanceUtilized.objects.create(finance_id=id[0], source_id=id[1],
+                                                amount=outstanding_amount,
+                                                paid_amount=float(amount), paid_date=date.today(),
+                                                payment_type='repayment')
                 finance_source = FinanceSource.objects.get(id=id[1])
                 if str(finance_source).lower() == 'self':
                     loan_data = FinanceLoan.active.get(id=id[0])
@@ -225,7 +228,6 @@ def finance_loan(request):
                     loan_data.paid_amount = float(loan_data.paid_amount) + float(amount)
                     loan_data.save()
             except Exception as e:
-                print(amount)
                 pass
         for id, amount in get_request_data(request, 'withdraw'):
             id = id.split("_")
