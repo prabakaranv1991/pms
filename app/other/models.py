@@ -29,10 +29,10 @@ class Card(TimeStampedModel):
 
 class Call(TimeStampedModel):
     number = models.CharField(max_length=50)
-    person_name = models.CharField(max_length=50)
+    person_name = models.CharField(max_length=50, default='-')
     type = models.CharField(max_length=100, choices=[('loan', 'LOAN'), ('insurance', 'INSURANCE'), ('trust', 'TRUST')], default='loan')
     bank = models.CharField(max_length=100, choices=[('icici', 'ICICI'), ('hdfc', 'HDFC'), ('sbi', 'SBI'), ('kvb', "KVB"), ('indian_bank', 'INDIAN BANK'), ('other', 'OTHERS'), ('bajaj', 'BAJAJ')])
-    short_description = models.CharField(max_length=100)
+    short_description = models.CharField(max_length=100, null=True, blank=True)
     response = models.CharField(max_length=50, choices=[('not_interested', 'Not Interested'), ('others', 'Others')], default='not_interested')
     description = models.TextField(null=True, blank=True)    
 
