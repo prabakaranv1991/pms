@@ -16,7 +16,14 @@
             <form class="form-horizontal" action="" method="post" novalidate>
             {% csrf_token %}
             <div class="card">
-                <div class="card-header"><strong>{{title}}</strong></div>
+                <div class="card-header">
+                    <strong>{{title}}</strong>
+                    <div class="card-header-actions">
+                        {%if title == 'Call' %}
+                        <a class="card-header-action btn-setting" href="other/call/">Calls</a>
+                        {%endif%}
+                    </div>
+                </div>
                 <div class="card-body">
                     {% include 'includes/form.html' with form=form %}
                 </div>
