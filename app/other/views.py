@@ -50,3 +50,4 @@ class CallUpdate(UpdateView):
     form_class = CallForm
     model = Call
     title = 'Call'
+    name_field = 'number'
