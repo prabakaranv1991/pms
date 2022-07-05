@@ -243,10 +243,13 @@ def finance_loan(request):
         self_finance_source = FinanceSource.objects.get(name='Self')
         for finance in FinanceLoan.active.all():
             if finance.self_utilized_amount == 0:
-                utilized = FinanceUtilized.objects.filter(finance=finance, source=self_finance_source).order_by('-created').first()
-                finance.self_utilized_amount = utilized.amount
-                finance.paid_amount = float(finance.paid_amount) + float(0 if utilized.paid_amount is None else utilized.paid_amount)
-                finance.save()
+                try:
+                    utilized = FinanceUtilized.objects.filter(finance=finance, source=self_finance_source).order_by('-created').first()
+                    finance.self_utilized_amount = utilized.amount
+                    finance.paid_amount = float(finance.paid_amount) + float(0 if utilized.paid_amount is None else utilized.paid_amount)
+                    finance.save()
+                except:
+                    pass
             source_list, data_tmp = FinanceUtilized.utilized(finance)
             pre_data = {}
             finance_data = {}
