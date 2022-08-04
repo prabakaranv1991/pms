@@ -66,8 +66,6 @@ def finance(request):
             if getattr(payment, type) != None:
                 if type in ('expense', 'income') :
                     if(getattr(payment, type).end_date != None):
-                        print(getattr(payment, type).end_date)
-                        print(datetime.strptime(month, "%Y-%m-%d"))
                         if(getattr(payment, type).end_date < datetime.strptime(month, "%Y-%m-%d").date()):
                             continue
                 monthly_payment_data[type].append(
