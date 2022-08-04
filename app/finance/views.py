@@ -61,7 +61,7 @@ def finance(request):
                 MonthlyPayment.objects.filter(**filter_param).update(**update_value)
 
     for payment in MonthlyPayment.objects.filter(month=month).select_related().order_by('income__sort_order',
-                                                                                        'expense__sort_order', 'income__name', 'expense__name'):
+                                                                                        'expense__sort_order', '-income__amount', '-expense__amount'):
         for type in ['income', 'credit', 'expense']:
             if getattr(payment, type) != None:
                 if type in ('expense', 'income') :
