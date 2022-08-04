@@ -4,7 +4,7 @@ from finance.forms import *
 from finance.models import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from datetime import date
+from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 from utils import *
 import pandas as pd
@@ -66,9 +66,9 @@ def finance(request):
             if getattr(payment, type) != None:
                 if type in ('expense', 'income') :
                     if(getattr(payment, type).end_date != None):
-                        print(getattr(payment, type).end_date)
-                        print(month)
-                        if(getattr(payment, type).end_date.date() < month):
+                        print(datetime.strptime(getattr(payment, type).end_date, "%Y-%m-%d"))
+                        print(datetime.strptime(month, "%Y-%m-%d"))
+                        if(datetime.strptime(getattr(payment, type).end_date, "%Y-%m-%d") < datetime.strptime(month, "%Y-%m-%d")):
                             continue
                 monthly_payment_data[type].append(
                     merge_dict(model_to_dict(getattr(payment, type)), model_to_dict(payment), ['id']))
