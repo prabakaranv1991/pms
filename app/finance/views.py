@@ -64,6 +64,9 @@ def finance(request):
                                                                                         'expense__sort_order'):
         for type in ['income', 'credit', 'expense']:
             if getattr(payment, type) != None:
+                if(getattr(payment, 'end_date') != None):
+                    if(payment.end_date < month):
+                        continue
                 monthly_payment_data[type].append(
                     merge_dict(model_to_dict(getattr(payment, type)), model_to_dict(payment), ['id']))
                 if type == 'credit':
