@@ -14,6 +14,7 @@ class Chit(TimeStampedModel):
     total_months = models.IntegerField()
     interest_percentage = models.DecimalField(max_digits = 15, decimal_places = 2, default = 1.5)
     commission_percentage = models.DecimalField(max_digits = 15, decimal_places = 2, default = 1.5)
+    closed = models.BooleanField(default=False, null = True)
 
     def __str__(self):
         return self.name

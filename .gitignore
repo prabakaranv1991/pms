@@ -2,5 +2,6 @@ database/*
 app/*/migrations/*
 static/*
 *.log
+.idea/
 .env*
 actions-runner/*

@@ -5,14 +5,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from dateutil.relativedelta import relativedelta
 from chit.models import Chit, Customers, ChitCustomers, ChitPayment, ChitSettlement
-from django.db.models import F
+from django.db.models import F, Q
 import pandas as pd
 from datetime import date, datetime
 from chit.forms import *
 
 @login_required
 def chit(request, chit_id=None):
-    chit_list = {data.id:data for data in Chit.objects.all().order_by('-start_date')}
+    chit_list = {data.id:data for data in Chit.objects.exclude(closed=True).order_by('-start_date')}
     customer_list = Customers.objects.order_by('name')
     customers = None
     chit_details = {}

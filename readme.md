@@ -12,6 +12,8 @@
 >docker exec -it pms_db pg_restore -j 8 -d pms -U pms /home/db_backup/pms.pgd
 ## Bash
 >docker exec -it pms_web /bin/bash
+## Log
+>docker logs --follow --tail 100 pms_web
 
 <br /><hr /><br />
 
