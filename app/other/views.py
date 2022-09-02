@@ -1,5 +1,5 @@
 import os, json
-from django.http import HttpResponse
+#from django.http import HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from crud import *
