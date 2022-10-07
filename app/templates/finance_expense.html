@@ -10,7 +10,7 @@
         <tr>
             <td class="text-center">{{ forloop.counter }}</td>
             <td>
-                {%if expense.paid_amount == expense.amount %}<del>{%endif%}
+                {%if expense.paid_amount == expense.amount %}<del class="text-success">{%endif%}
                 {{ expense.name }}
                 {%if expense.paid_amount == expense.amount %}</del>{%endif%}
             </td>

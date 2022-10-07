@@ -5,7 +5,7 @@
 <tr>
     <td class="text-center">{{ forloop.counter|add:sno_start }}</td>
     <td>
-        {%if data.paid_amount == data.amount %}<del>{%endif%}
+        {%if data.paid_amount == data.amount %}<del class="text-danger">{%endif%}
         {{ data.name }}
         {%if data.paid_amount == data.amount %}</del>{%endif%}
     </td>
