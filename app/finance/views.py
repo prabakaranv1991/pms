@@ -93,7 +93,7 @@ def finance(request):
     except:
         pass
     if len(monthly_payment_data['income']) == 0:
-        for type in ['income', 'credit', 'expense']:
+        for type in ['income', 'expense']:
             if type == 'credit':
                 model_data = Credit.active.all()
             elif type == 'income':
